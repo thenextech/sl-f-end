@@ -93,4 +93,4 @@ jobs:
 
       - name: Deploy Kubernetes
         if: github.ref == 'refs/heads/actions-test'
-        run: kubectl apply --kubeconfig ${HOME}/.kube/config -f kubernetes/dev-deploy.yaml
+        run: kubectl apply --kubeconfig ${HOME}/.kube/config -f kubernetes/dev-deploy.yaml --request-timeout=5m
