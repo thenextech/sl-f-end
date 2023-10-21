@@ -1,5 +1,4 @@
 import React from 'react'
-import {AiOutlineArrowRight} from 'react-icons/ai'
 
 export default function VFPHome() {
   return (

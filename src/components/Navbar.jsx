@@ -2,7 +2,6 @@ import React, {useState} from 'react'
 import {IoMdMenu} from 'react-icons/io'
 import {BiSolidUser} from 'react-icons/bi'
 import logo from '../assets/images/shopLoc.png'
-import Transition from './Transition'
 
 export default function Navbar() {
 
