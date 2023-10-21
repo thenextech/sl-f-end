@@ -21,7 +21,7 @@ export default function Navbar() {
         <div className="w-[75%] h-[100%] flex flex-col justify-between">
           <div>
             <div className="flex flex-col items-center">
-              <button className="text-white bg-[#3C24D1] py-[7px] px-[15px] rounded-[10px] font-semibold text-center text-[16px] sm:text-[16px] md:text-[18px] w-[100%] mt-5 hover:cursor-pointer">OUEE DEPLOY OUE</button>
+              <button className="text-white bg-[#3C24D1] py-[7px] px-[15px] rounded-[10px] font-semibold text-center text-[16px] sm:text-[16px] md:text-[18px] w-[100%] mt-5 hover:cursor-pointer">JUREEE ?</button>
               <button className="text-black bg-[#EAEAEA] py-[7px] px-[15px] rounded-[10px] font-semibold text-center text-[16px] sm:text-[16px] md:text-[18px] w-[100%] mt-2 hover:cursor-pointer">Connexion</button>
             </div>
             <div className="mt-3">
