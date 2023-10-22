@@ -2,7 +2,7 @@
 function App() {
   return (
     <h1>
-      Hello world!
+      Best GLOP TEAM - Terencia
     </h1>
   )
 }
