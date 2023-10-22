@@ -12,16 +12,16 @@ export default function Footer() {
             <div className="flex flex-col items-end lg:w-[30%]">
                 <div className="lg:flex lg:flex-row lg:items-center lg:justify-between lg:w-full">
                     <div className="mb-2 mt-1">
-                        <h4 className="text-white font-bold text-[#8C8C8C] text-[15px] sm:text-[18px] lg:text-[15px] text-end">Clients Shoploc</h4>
+                        <h4 className="font-bold text-[#8C8C8C] text-[15px] sm:text-[18px] lg:text-[15px] text-end">Clients Shoploc</h4>
                         <p className="text-white text-[11px] sm:text-[14px] text-end lg:text-[14px] font-semibold"><a href="#">Questions fréquentes</a></p>
                     </div>
                     <div className="mb-2">
-                        <h4 className="text-white font-bold text-[#8C8C8C] text-[15px] sm:text-[18px] lg:text-[15px] text-end">PARTENAIRES ShopLoc</h4>
+                        <h4 className="font-bold text-[#8C8C8C] text-[15px] sm:text-[18px] lg:text-[15px] text-end">PARTENAIRES ShopLoc</h4>
                         <p className="text-white text-[11px] sm:text-[14px] text-end lg:text-[14px] font-semibold"><a href="#">ShopLoc Partenaire</a></p>
                     </div>
                 </div>
                 <div className="mb-3">
-                    <h4 className="text-white font-bold text-white text-[15px] sm:text-[18px] lg:text-[15px] text-end ">Contactez-nous</h4>
+                    <h4 className="font-bold text-[#8C8C8C] text-[15px] sm:text-[18px] lg:text-[15px] text-end ">Contactez-nous</h4>
                     <p className="text-white text-[11px] sm:text-[14px] text-end lg:text-[14px] font-semibold"><a href="#">contact@shoploc.fr</a></p>
                 </div>
             </div>
