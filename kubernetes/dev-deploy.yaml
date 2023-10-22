@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: front-end
-        image: nextechsolutions/shoploc:front-end:TAG_TO_REPLACE
+        image: nextechsolutions/shoploc:front-end-TAG_TO_REPLACE
         imagePullPolicy: Always
         ports:
         - containerPort: 3000

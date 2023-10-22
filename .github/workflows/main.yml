@@ -87,12 +87,12 @@ jobs:
         run: echo "DOCKER_TAG=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
       
       - name: Build Docker Image
-        run: docker build -f Dockerfile -t nextechsolutions/shoploc:front-end:$DOCKER_TAG .
+        run: docker build -f Dockerfile -t nextechsolutions/shoploc:front-end-$DOCKER_TAG .
 
       - name: Push Docker Image to Registry
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker push nextechsolutions/shoploc:front-end:$DOCKER_TAG
+          docker push nextechsolutions/shoploc:front-end-$DOCKER_TAG
 
       - name: Substitute Docker Tag in Kubernetes Deployment
         run: sed -i "s/TAG_TO_REPLACE/$DOCKER_TAG/" kubernetes/dev-deploy.yaml
