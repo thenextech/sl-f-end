@@ -3,6 +3,8 @@ import {IoMdMenu} from 'react-icons/io'
 import {BiSolidUser} from 'react-icons/bi'
 import logo from '../assets/images/shopLoc.png'
 import Transition from './Transition'
+import { Link } from "react-router-dom";
+
 
 export default function Navbar() {
 
@@ -16,14 +18,14 @@ export default function Navbar() {
   return (
     <>
     <div>
-      <div className={drawerClicked ? "fixed top-0 w-screen h-screen bg-black opacity-80" : "hidden"} onClick={() => { handleDrawerClick(false) }}>
+      <div className={drawerClicked ? "fixed top-0 w-screen h-screen bg-black opacity-80 z-30" : "hidden"} onClick={() => { handleDrawerClick(false) }}>
       </div>
-      <div className={drawerClicked ? "w-[55%] sm:w-[45%]  md:w-[17%] h-[100%] bg-white fixed top-0 shadow-xl flex flex-col items-center" : "fixed left-[100%]"} onClick={handleDrawerClick}>
+      <div className={drawerClicked ? "w-[55%] sm:w-[45%]  md:w-[35%] lg:w-[20%] h-[100%] bg-white fixed top-0 shadow-xl flex flex-col items-center z-40" : "fixed left-[100%]"} onClick={handleDrawerClick}>
         <div className="w-[75%] h-[100%] flex flex-col justify-between">
           <div>
             <div className="flex flex-col items-center">
-              <button className="text-white bg-[#3C24D1] py-[7px] px-[15px] rounded-[10px] font-semibold text-center text-[16px] sm:text-[16px] md:text-[18px] w-[100%] mt-5 hover:cursor-pointer">Inscription</button>
-              <button className="text-black bg-[#EAEAEA] py-[7px] px-[15px] rounded-[10px] font-semibold text-center text-[16px] sm:text-[16px] md:text-[18px] w-[100%] mt-2 hover:cursor-pointer">Connexion</button>
+              <button className="text-white bg-[#3C24D1] py-[7px] px-[15px] rounded-[10px] font-semibold text-center text-[16px] sm:text-[16px] md:text-[18px] w-[100%] mt-5 hover:cursor-pointer"><Link to="/register">Inscription</Link></button>
+              <button className="text-black bg-[#EAEAEA] py-[7px] px-[15px] rounded-[10px] font-semibold text-center text-[16px] sm:text-[16px] md:text-[18px] w-[100%] mt-2 hover:cursor-pointer"><Link to="/login">Connexion</Link></button>
             </div>
             <div className="mt-3">
               <p className="hover:cursor-pointer">Commerçants</p>
@@ -31,7 +33,7 @@ export default function Navbar() {
               <p className="hover:cursor-pointer">FAQ</p>
           </div>
           </div>
-          <div>
+          <div className="flex flex-col items-center">
             <img src={logo} alt="logo shoploc" className="w-[270px] sm:w-[250px] md:w-[270px]"></img>
             <p className="text-[10px] text-[#494949] font-semibold mb-2 text-center">
               © 2023 ShopLoc - Tous droits réservés
@@ -46,9 +48,9 @@ export default function Navbar() {
           </div> 
           <div className='flex'>
               <div className="w-[35px] sm:w-[42px] md:w-[45px] bg-[#D9D9D9] rounded-[30px] h-[35px] sm:h-[42px] md:h-[45px] mr-[12px] sm:mr-[18px] md:mr-[23px] flex items-center justify-center hover:cursor-pointer">
-                  <BiSolidUser className="text-[18px] sm:text-[23px] md:text-[26px]"></BiSolidUser>
+              <Link to="/login"><BiSolidUser className="text-[18px] sm:text-[23px] md:text-[26px]"></BiSolidUser></Link>
               </div>
-              <button className="text-white bg-[#3C24D1] py-[7px] px-[15px] rounded-[30px] font-bold text-center text-[13px] sm:text-[16px] md:text-[18px] h-[90%]">Inscription</button>
+              <button className="text-white bg-[#3C24D1] py-[7px] px-[15px] rounded-[30px] font-bold text-center text-[13px] sm:text-[16px] md:text-[18px] h-[90%]"><Link to="/register">Inscription</Link></button>
           </div>
       </div>
     </div>
