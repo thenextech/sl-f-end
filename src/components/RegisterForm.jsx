@@ -21,7 +21,7 @@ export default function RegisterForm() {
           <label className="font-bold text-[11px] sm:text-[13px] ml-1">
             Nom de la société*
           </label>
-          <div className="h-[25px] sm:w-[70%] sm:h-[30px] w-[65%] bg-[#ECECEC] rounded-[50px] w-[50%] font-normal flex items-center">
+          <div className="h-[25px] md:w-[70%] sm:h-[30px] w-full bg-[#ECECEC] rounded-[50px] w-[50%] font-normal flex items-center">
             <input
               type="text"
               value={companyName}
@@ -35,7 +35,7 @@ export default function RegisterForm() {
           <label className="font-bold text-[11px] sm:text-[13px] ml-1">
             Représentant de la société*
           </label>
-          <div className="h-[25px] sm:w-[70%] sm:h-[30px] w-[65%] bg-[#ECECEC] rounded-[50px] w-[50%] font-normal flex items-center">
+          <div className="h-[25px] md:w-[70%] sm:h-[30px] w-full bg-[#ECECEC] rounded-[50px] w-[50%] font-normal flex items-center">
             <input
               type="text"
               value={representative}
@@ -49,7 +49,7 @@ export default function RegisterForm() {
           <label className="font-bold text-[11px] sm:text-[13px] ml-1">
             Adresse e-mail*
           </label>
-          <div className="h-[25px] sm:w-[70%] sm:h-[30px] w-[65%] bg-[#ECECEC] rounded-[50px] w-[50%] font-normal flex items-center">
+          <div className="h-[25px] md:w-[70%] sm:h-[30px] w-full bg-[#ECECEC] rounded-[50px] w-[50%] font-normal flex items-center">
             <input
               type="text"
               value={companyName}
@@ -63,7 +63,7 @@ export default function RegisterForm() {
           <label className="font-bold text-[11px] sm:text-[13px] ml-1">
             Adresse ligne 1
           </label>
-          <div className="h-[25px] sm:w-[70%] sm:h-[30px] w-[65%] bg-[#ECECEC] rounded-[50px] w-[50%] font-normal flex items-center">
+          <div className="h-[25px] md:w-[70%] sm:h-[30px] w-full bg-[#ECECEC] rounded-[50px] w-[50%] font-normal flex items-center">
           <input
             type="text"
             value={address1}
@@ -76,7 +76,7 @@ export default function RegisterForm() {
           <label className="font-bold text-[11px] sm:text-[13px] ml-1">
             Adresse ligne 2
           </label>
-          <div className="h-[25px] sm:w-[70%] sm:h-[30px] w-[65%] bg-[#ECECEC] rounded-[50px] w-[50%] font-normal flex items-center">
+          <div className="h-[25px] md:w-[70%] sm:h-[30px] w-full bg-[#ECECEC] rounded-[50px] w-[50%] font-normal flex items-center">
           <input
             type="text"
             value={address2}
@@ -86,7 +86,7 @@ export default function RegisterForm() {
           </div>
           
         </div>
-        <div className="flex justify-between w-[65%] sm:w-[70%] mb-3">
+        <div className="flex justify-between w-full md:w-[70%]  mb-3">
           <div className="flex flex-col w-[55%]">
             <label className="font-bold text-[11px] sm:text-[13px] ml-1">
               Ville
@@ -124,7 +124,7 @@ export default function RegisterForm() {
           />
           <p className="font-bold text-[9px] lg:text-[12px] sm:text-[11px] ml-2 ml-1">J'accepte les <Link to="#" className="text-[#3C24D1]">conditions générales d'utilisation*</Link></p>
         </div>
-        <div className="w-[65%] sm:w-[70%] flex flex-col items-center mt-1 mb-3">
+        <div className="w-full md:w-[70%]  flex flex-col items-center mt-1 mb-3">
           <button type="submit" className="mt-3 text-center rounded-[50px] w-full bg-[#3C24D1]  py-1 text-white lg:w-[40%] lg:py-1 lg:text-[18px]">Soumettre ma demande</button>
           <p className="text-[9px] lg:text-[12px] mt-1 font-semibold">Déjà partenaire ? <Link to="/login" className="text-[#3C24D1]">Accédez à votre espace</Link></p>
         </div>
