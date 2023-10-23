@@ -14,7 +14,7 @@ export default function LoginHero() {
                 <div className="ml-4 sm:w-[50%] md:w-[50%] lg:w-[20%] lg:ml-48">
                     <LoginForm />
                 </div>
-                <img src={ShopImg} alt="Shop logo" className="absolute max-[375px]:left-[235px] max-[375px]:top-[-10px] max-[450px]:left-[205px] max-[450px]:top-[-40px] max-[500px]:left-[270px] max-[500px]:top-[-30px] max-[530px]:w-[400px] max-[530px]:left-[290px] max-[530px]:top-[-30px] max-[560px]:w-[400px] max-[560px]:left-[320px] max-[560px]:top-[-30px] max-[600px]:left-[350px] max-[600px]:w-[400px] max-[600px]:top-[-30px] min-[600px]:w-[400px] min-[600px]:left-[410px] min-[600px]:top-[-40px] md:left-[430px] md:top-[-50px] md:w-[500px] lg:w-[600px] lg:left-[1200px] lg:top-[-100px]" />
+                <img src={ShopImg} alt="Shop logo" className="absolute max-[375px]:left-[235px] max-[375px]:top-[-10px] max-[450px]:left-[245px] max-[450px]:top-[-10px] max-[500px]:left-[270px] max-[500px]:top-[-30px] max-[530px]:w-[400px] max-[530px]:left-[290px] max-[530px]:top-[-30px] max-[560px]:w-[400px] max-[560px]:left-[320px] max-[560px]:top-[-30px] max-[600px]:left-[350px] max-[600px]:w-[400px] max-[600px]:top-[-30px] min-[600px]:w-[400px] min-[600px]:left-[410px] min-[600px]:top-[-40px] md:left-[550px] md:top-[-50px] md:w-[500px] min-[800px]:w-[600px]  min-[820px]:left-[500px] min-[820px]:top-[-70px] min-[1000px]:left-[700px] min-[1000px]:top-[-70px] min-[1300px]:left-[1000px] min-[1300px]:top-[-70px] min-[1700px]:left-[1200px] min-[1700px]:top-[-70px]" />
             </div>
         </div>
         
