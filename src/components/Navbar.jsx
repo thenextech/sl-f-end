@@ -20,7 +20,7 @@ export default function Navbar() {
     <div>
       <div className={drawerClicked ? "fixed top-0 w-screen h-screen bg-black opacity-80 z-30" : "hidden"} onClick={() => { handleDrawerClick(false) }}>
       </div>
-      <div className={drawerClicked ? "w-[55%] sm:w-[45%]  md:w-[17%] h-[100%] bg-white fixed top-0 shadow-xl flex flex-col items-center z-40" : "fixed left-[100%]"} onClick={handleDrawerClick}>
+      <div className={drawerClicked ? "w-[55%] sm:w-[45%]  md:w-[35%] lg:w-[20%] h-[100%] bg-white fixed top-0 shadow-xl flex flex-col items-center z-40" : "fixed left-[100%]"} onClick={handleDrawerClick}>
         <div className="w-[75%] h-[100%] flex flex-col justify-between">
           <div>
             <div className="flex flex-col items-center">
@@ -33,7 +33,7 @@ export default function Navbar() {
               <p className="hover:cursor-pointer">FAQ</p>
           </div>
           </div>
-          <div>
+          <div className="flex flex-col items-center">
             <img src={logo} alt="logo shoploc" className="w-[270px] sm:w-[250px] md:w-[270px]"></img>
             <p className="text-[10px] text-[#494949] font-semibold mb-2 text-center">
               © 2023 ShopLoc - Tous droits réservés
