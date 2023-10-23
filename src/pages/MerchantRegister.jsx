@@ -4,7 +4,7 @@ import Footer from '../components/Footer'
 import RegisterHero from '../components/RegisterHero'
 import Card from '../components/Card'
 
-function Register() {
+function MerchantRegister() {
   return (
     <>
         <Navbar />
@@ -19,4 +19,4 @@ function Register() {
   )
 }
 
-export default Register
+export default MerchantRegister
