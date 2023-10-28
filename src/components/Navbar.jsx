@@ -15,6 +15,7 @@ export default function Navbar() {
     setDrawerClicked(!drawerClicked);
   }
 
+
   return (
     <>
     <div>
@@ -24,11 +25,11 @@ export default function Navbar() {
         <div className="w-[75%] h-[100%] flex flex-col justify-between">
           <div>
             <div className="flex flex-col items-center">
-              <button className="text-white bg-[#3C24D1] py-[7px] px-[15px] rounded-[10px] font-semibold text-center text-[16px] sm:text-[16px] md:text-[18px] w-[100%] mt-5 hover:cursor-pointer"><Link to="/c/register">Inscription</Link></button>
+              <button className="text-white bg-[#3C24D1] py-[7px] px-[15px] rounded-[10px] font-semibold text-center text-[16px] sm:text-[16px] md:text-[18px] w-[100%] mt-5 hover:cursor-pointer"><Link to="/register">Inscription</Link></button>
               <button className="text-black bg-[#EAEAEA] py-[7px] px-[15px] rounded-[10px] font-semibold text-center text-[16px] sm:text-[16px] md:text-[18px] w-[100%] mt-2 hover:cursor-pointer"><Link to="/login">Connexion</Link></button>
             </div>
             <div className="mt-3">
-              <p className="hover:cursor-pointer"><Link to="/m/register">Commerçants</Link></p>
+              <p className="hover:cursor-pointer"><Link to="/m/login">Commerçants</Link></p>
               <p className="hover:cursor-pointer">Programme de fidelité</p>
               <p className="hover:cursor-pointer">FAQ</p>
           </div>
@@ -44,13 +45,16 @@ export default function Navbar() {
       <div className="text-black flex items-center justify-between px-3 mt-3 md:px-[25px]">
           <div className="flex items-center">
               <IoMdMenu className="text-[25px] sm:text-[38px] md:text-[50px] hover:cursor-pointer" onClick={handleDrawerClick}></IoMdMenu>
-              <img src={logo} alt="logo shoploc" className="w-[120px] sm:w-[150px] md:w-[180px] ml-3 sm:ml-[25px] md:ml-[65px]"></img>
+              <Link to="/"><img src={logo} alt="logo shoploc" className="w-[120px] sm:w-[150px] md:w-[180px] ml-3 sm:ml-[25px] md:ml-[65px] hover:cursor-pointer"></img></Link>
           </div> 
-          <div className='flex'>
-              <div className="w-[35px] sm:w-[42px] md:w-[45px] bg-[#D9D9D9] rounded-[30px] h-[35px] sm:h-[42px] md:h-[45px] mr-[12px] sm:mr-[18px] md:mr-[23px] flex items-center justify-center hover:cursor-pointer">
-              <Link to="/login"><BiSolidUser className="text-[18px] sm:text-[23px] md:text-[26px]"></BiSolidUser></Link>
-              </div>
-              <button className="text-white bg-[#3C24D1] py-[7px] px-[15px] rounded-[30px] font-bold text-center text-[13px] sm:text-[16px] md:text-[18px] h-[90%]"><Link to="/register">Inscription</Link></button>
+          <div className='flex items-center md:h-[60px]'>
+              <Link to="/m/login"><div className="hidden md:block md:mr-[23px] border-2 py-[7px] px-[15px] border-black rounded-[30px] hover:cursor-pointer">
+                <p className="text-[1px] sm:text-[16px] md:text-[16px] text-center">Commerçants</p>
+              </div></Link>
+              <Link to="/login"><div className="w-[35px] sm:w-[42px] md:w-[45px] bg-[#D9D9D9] rounded-[30px] h-[35px] sm:h-[42px] md:h-[45px] mr-[12px] sm:mr-[18px] md:mr-[23px] flex items-center justify-center hover:cursor-pointer">
+                <BiSolidUser className="text-[18px] sm:text-[23px] md:text-[26px]"></BiSolidUser>
+              </div></Link>
+              <button className="text-white bg-[#3C24D1] py-[7px] px-[15px] rounded-[30px] font-bold text-center text-[13px] sm:text-[16px] md:text-[18px]"><Link to="/register">Inscription</Link></button>
           </div>
       </div>
     </div>
