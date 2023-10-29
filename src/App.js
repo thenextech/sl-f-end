@@ -5,6 +5,7 @@ import MerchantRegister from './pages/MerchantRegister'
 import MerchantLogin from './pages/MerchantLogin'
 import ClientRegister from "./pages/ClientRegister"
 import ClientLogin from "./pages/ClientLogin";
+import ClientDashboard from "./pages/ClientDashboard";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/m/login" element = {<MerchantLogin />} />
           <Route path="/register" element = {<ClientRegister />} />
           <Route path="/login" element = {<ClientLogin />} />
+          <Route path="/dashboard" element = {<ClientDashboard />} />
         </Routes>
       </BrowserRouter>
     </div>

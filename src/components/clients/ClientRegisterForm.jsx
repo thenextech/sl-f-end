@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {AiFillInfoCircle} from 'react-icons/ai';
 
 export default function ClientRegisterForm() {
+
+    const baseURL = "http://localhost:8080";
+
     const [lastName, setLastName] = useState("");
     const [firstName, setFirstName] = useState("");
     const [emailAddress, setEmailAddress] = useState("");
@@ -17,6 +20,9 @@ export default function ClientRegisterForm() {
     const [errors, setErrors] = useState({});
     const [showPasswordRules, setShowPasswordRules] = useState(false);
     const [selectedCommunes, setSelectedCommunes] = useState([]);
+    
+    const navigate = useNavigate();
+
 
     useEffect(() => {
       // Lorsque la valeur de "city" change, effectuer une requête à l'API Geonames
@@ -91,7 +97,7 @@ export default function ClientRegisterForm() {
       }
 
       // Validation logic for Adresse ligne 2
-      if (!/^[-'a-zA-Z0-9, ]+$/.test(address2)) {
+      if (!address2 === "" && !/^[-'a-zA-Z0-9, ]+$/.test(address2)) {
         newErrors.address2 = "Adresse non valide. Utilisez des lettres minuscules, des lettres majuscules, des chiffres, des symboles comme -, ,, et '";
       }
 
@@ -101,8 +107,32 @@ export default function ClientRegisterForm() {
       }
 
       if (Object.keys(newErrors).length === 0) {
-        // Soumettre le formulaire si aucune erreur n'est présente
-        // Placez ici votre logique de soumission du formulaire
+        const formData = new FormData();
+        formData.append('firstName', firstName);
+        formData.append('lastName', lastName);
+        formData.append('email', emailAddress);
+        formData.append('password', password);
+        formData.append('lineAddress1', address1);
+        formData.append('lineAddress2', address2);
+        formData.append('city', city);
+        formData.append('postalCode', postalCode);
+
+        fetch('http://localhost:8080/client/register', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => {
+          if (response.ok) {
+            console.log('Registration successful!');
+            console.log(response.url);
+            navigate('/login');
+          } else {
+            console.log(response.message);
+          }
+        })
+        .catch(error => {
+          console.error('Registration failed:', error);
+        });
       } else {
         console.log(newErrors);
         setErrors(newErrors);
@@ -121,6 +151,7 @@ export default function ClientRegisterForm() {
                 type="text"
                 value={lastName}
                 required
+                name="lastName"
                 onChange={(event) => setLastName(event.target.value)}
                 className="bg-[#ECECEC] rounded-[50px] text-[12px] sm:text-[13px] ml-2 focus:outline-none w-[95%]"
               />
@@ -138,6 +169,7 @@ export default function ClientRegisterForm() {
               type="text"
               value={firstName}
               required
+              name="firstName"
               onChange={(event) => setFirstName(event.target.value)}
               className="bg-[#ECECEC] rounded-[50px] text-[12px] sm:text-[13px] ml-2 w-full focus:outline-none"
               />
@@ -155,6 +187,7 @@ export default function ClientRegisterForm() {
             <input
               type="email"
               value={emailAddress}
+              name="email"
               onChange={(event) => setEmailAddress(event.target.value)}
               required
               className="bg-[#ECECEC] rounded-[50px] text-[12px] sm:text-[13px] ml-2 focus:outline-none w-[95%] "
@@ -162,6 +195,9 @@ export default function ClientRegisterForm() {
           </div>
           {errors.emailAddress && (
           <p className="ml-1 text-[#ff0000] text-[10px]">{errors.emailAddress}</p>
+          )}
+          {errors.alreadyUsedEmail && (
+              <p className="ml-1 text-[#ff0000] text-[10px]">{errors.alreadyUsedEmail}</p>
           )}
         </div>
         <div className="flex flex-col mb-2">
@@ -172,6 +208,7 @@ export default function ClientRegisterForm() {
             <input
               type="password"
               value={password}
+              name="password"
               onChange={(event) => setPassword(event.target.value)}
               required
               className="bg-[#ECECEC] rounded-[50px] text-[12px] sm:text-[13px] ml-2 focus:outline-none w-[95%] md:w-[95%]"
@@ -210,6 +247,9 @@ export default function ClientRegisterForm() {
             className="bg-[#ECECEC] rounded-[50px] text-[12px] sm:text-[13px] ml-2 focus:outline-none w-[95%]"
           />
           </div>
+          {errors.confirmPwd && (
+            <p className="ml-1 text-[#ff0000] text-[10px]">{errors.confirmPwd}</p>
+          )}
         </div>
         <div className="flex flex-col mb-2">
           <label className="font-bold text-[11px] sm:text-[13px] ml-1">
@@ -219,6 +259,7 @@ export default function ClientRegisterForm() {
           <input
             type="text"
             value={address1}
+            name="lineAddress1"
             onChange={(event) => setAddress1(event.target.value)}
             required
             className="bg-[#ECECEC] rounded-[50px] text-[12px] sm:text-[13px] ml-2 focus:outline-none w-[95%]"
@@ -236,6 +277,7 @@ export default function ClientRegisterForm() {
           <input
             type="text"
             value={address2}
+            name="lineAddress2"
             onChange={(event) => setAddress2(event.target.value)}
             className="bg-[#ECECEC] rounded-[50px] text-[12px] sm:text-[13px] ml-2 focus:outline-none w-[95%]"
           />
@@ -253,6 +295,7 @@ export default function ClientRegisterForm() {
               <input
                 type="text"
                 value={city}
+                name="city"
                 onChange={(event) => setCity(event.target.value)}
                 required
                 className="bg-[#ECECEC] rounded-[50px] text-[12px] sm:text-[13px] ml-2 focus:outline-none w-[95%]"
@@ -267,7 +310,7 @@ export default function ClientRegisterForm() {
               Code postal*
             </label>
             <div className="h-[25px] sm:h-[30px] bg-[#ECECEC] rounded-[50px] font-normal flex items-center">
-               <select value={postalCode} onChange={(event) => setPostalCode(event.target.value)} className="bg-[#ECECEC] rounded-[50px] text-[12px] sm:text-[13px] ml-2 w-full focus:outline-none" required>
+               <select name="postalCode" value={postalCode} onChange={(event) => setPostalCode(event.target.value)} className="bg-[#ECECEC] rounded-[50px] text-[12px] sm:text-[13px] ml-2 w-full focus:outline-none" required>
                 <option value=""></option>
                 {selectedCommunes.map((codePostal) => (
                   <option key={codePostal} value={codePostal}>{codePostal}</option>
