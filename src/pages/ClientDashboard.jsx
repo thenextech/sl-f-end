@@ -1,4 +1,5 @@
 import React from 'react'
+import ClientNavbar from '../components/clients/ClientNavbar';
 
 export default function ClientDashboard() {
   const queryParams = new URLSearchParams(window.location.search);
@@ -6,8 +7,8 @@ export default function ClientDashboard() {
     const lastName = queryParams.get('lastName');
 
     return (
-        <div>
-            <h2>Bienvenue {firstName} !</h2>
-        </div>
+        <>
+            <ClientNavbar />
+        </>
     );
 }

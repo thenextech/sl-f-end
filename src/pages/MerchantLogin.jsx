@@ -1,5 +1,5 @@
 import React from 'react'
-import Navbar from '../components/Navbar'
+import HomeNavbar from '../components/HomeNavbar'
 import Footer from '../components/Footer'
 import MerchantLoginHero from '../components/merchants/MerchantLoginHero'
 import Card from '../components/Card'
@@ -7,7 +7,7 @@ import Card from '../components/Card'
 function MerchantLogin() {
   return (
     <>
-        <Navbar />
+        <HomeNavbar />
         <MerchantLoginHero />
         <div className="lg:flex items-center md:flex items-center">
           <Card title="Augmentation des ventes" paragraph="Attirez d’avantage de clients qui préfèrent commander en ligne "/>

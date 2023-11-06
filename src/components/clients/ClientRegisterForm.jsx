@@ -49,7 +49,7 @@ export default function ClientRegisterForm() {
       }
     }, [city]);
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
       event.preventDefault();
       const newErrors = {};
 
@@ -117,22 +117,12 @@ export default function ClientRegisterForm() {
         formData.append('city', city);
         formData.append('postalCode', postalCode);
 
-        fetch('http://localhost:8080/client/register', {
+        const res = await fetch('http://localhost:8080/client/register', {
           method: 'POST',
           body: formData
         })
-        .then(response => {
-          if (response.ok) {
-            console.log('Registration successful!');
-            console.log(response.url);
-            navigate('/login');
-          } else {
-            console.log(response.message);
-          }
-        })
-        .catch(error => {
-          console.error('Registration failed:', error);
-        });
+        var data = await res.json();
+        console.log(data);
       } else {
         console.log(newErrors);
         setErrors(newErrors);

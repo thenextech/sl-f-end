@@ -1,5 +1,5 @@
 import React from 'react'
-import Navbar from '../components/Navbar'
+import HomeNavbar from '../components/HomeNavbar'
 import Footer from '../components/Footer'
 import ClientLoginHero from '../components/clients/ClientLoginHero'
 import Card from '../components/Card'
@@ -7,7 +7,7 @@ import Card from '../components/Card'
 function ClientLogin() {
   return (
     <>
-        <Navbar />
+        <HomeNavbar />
         <ClientLoginHero />
         <div className="lg:flex items-center md:flex items-center">
           <Card title="Click and collect simplifié" paragraph="Parcourez et réservez vos achats en un seul clic."/>

@@ -1,4 +1,4 @@
-import Navbar from "../components/Navbar"
+import HomeNavbar from "../components/HomeNavbar"
 import Hero from "../components/Hero"
 import Card from "../components/Card"
 import HowItWorks from "../components/HowItWorks"
@@ -8,7 +8,7 @@ import Footer from "../components/Footer"
 function Home() {
   return (
     <>
-      <Navbar />
+      <HomeNavbar />
       <Hero />
       <div className="lg:flex items-center md:flex items-center">
         <Card title="Click and collect simplifié" paragraph="Parcourez et réservez vos achats en un seul clic."/>
