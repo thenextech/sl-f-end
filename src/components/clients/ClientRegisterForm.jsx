@@ -27,10 +27,11 @@ export default function ClientRegisterForm() {
     useEffect(() => {
       // Lorsque la valeur de "city" change, effectuer une requête à l'API Geonames
       if (city) {
-        fetch(`https://geo.api.gouv.fr/communes?nom=${city}&fields=codesPostaux,nom`)
+        const formattedCity = city.charAt(0).toUpperCase() + city.slice(1);
+        fetch(`https://geo.api.gouv.fr/communes?nom=${formattedCity}&fields=codesPostaux,nom`)
           .then(response => response.json())
           .then(data => {
-            const theCity = data.find(elt => elt.nom === city);
+            const theCity = data.find(elt => elt.nom === formattedCity);
             console.log(theCity);
             if (theCity) {
               setSelectedCommunes(theCity.codesPostaux);
@@ -117,12 +118,19 @@ export default function ClientRegisterForm() {
         formData.append('city', city);
         formData.append('postalCode', postalCode);
 
-        const res = await fetch('http://localhost:8080/client/register', {
+        const response = await fetch('http://localhost:8080/client/register', {
           method: 'POST',
           body: formData
         })
-        var data = await res.json();
-        console.log(data);
+
+        if (response.ok) {
+          const url = await response.json();
+          navigate(url['url']);
+        } else {
+          const errorMessage = await response.json();
+          newErrors.authFailed = errorMessage;
+          setErrors(newErrors);
+        }
       } else {
         console.log(newErrors);
         setErrors(newErrors);
@@ -320,8 +328,11 @@ export default function ClientRegisterForm() {
           <p className="font-bold text-[9px] lg:text-[12px] sm:text-[11px] ml-2 ml-1">J'accepte les <Link to="#" className="text-[#3C24D1]">conditions générales d'utilisation*</Link></p>
         </div>
         <div className="w-full md:w-[70%]  flex flex-col items-center mt-1 mb-3">
+          {errors.authFailed && (
+              <p className="ml-1 text-[#ff0000] text-[10px]">{errors.authFailed}</p>
+          )}
           <button type="submit" className="mt-3 text-center rounded-[50px] w-full bg-[#3C24D1]  py-1 text-white lg:w-[60%] lg:py-1 lg:text-[18px]">M'inscrire</button>
-          <p className="text-[9px] lg:text-[12px] mt-1 font-semibold">Déjà inscrit ? <Link to="/login" className="text-[#3C24D1]">Accédez à votre compte</Link></p>
+          <p className="text-[9px] lg:text-[12px] mt-1 font-semibold">Déjà inscrit ? <Link to="/client/login" className="text-[#3C24D1]">Accédez à votre compte</Link></p>
         </div>
       </form>
     )
