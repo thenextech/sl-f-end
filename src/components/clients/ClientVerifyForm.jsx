@@ -12,20 +12,25 @@ export default function ClientVerifyForm() {
       const formData = new FormData();
         formData.append('code', code);
       
-      const response = await fetch('http://localhost:8080/client/verify', {
+      try {
+        const response = await fetch('http://localhost:8080/client/verify', {
           method: 'POST',
+          credentials: 'include',
           body: formData
-      });
+        });
         
-      if (response.ok) {
-        const url = await response.json();
-        navigate(url['url']);
-      } else {
-        const errorMessage = await response.json();
-        setError(errorMessage['error']);
+        if (response.ok) {
+          const url = await response.json();
+          navigate(url['url']);
+        } else {
+          const errorMessage = await response.json();
+          setError(errorMessage['error']);
+        }
+      } catch (error) {
+        setError('Une erreur est survenue lors de la vérification par code');
       }
-    };
-  
+    }
+    
     return (
       <>
         <p className="font-semibold text-[15px] text-center mb-4">Un code de vérification vous a été envoyé à votre adresse mail. 

@@ -1,36 +1,51 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import ClientNavbar from '../components/clients/ClientNavbar';
 
 export default function ClientDashboard() {
-
     const [isAuthenticated, setIsAuthenticated] = useState(null);
+    const [userData, setUserData] = useState({});
 
     const isThereAnActiveSession = async () => {
         try {
             const response = await fetch('http://localhost:8080/client/dashboard', {
+                credentials: 'include',
                 method: 'GET'
-            })
-            console.log(response.ok)
+            });
+
             if (response.ok) {
+                const data = await response.json();
                 setIsAuthenticated(true);
+                console.log(data);
+                setUserData(data.object);
+            } else {
+                setIsAuthenticated(false);
             }
         } catch (error) {
             console.error('Error:', error);
+            setIsAuthenticated(false); 
         }
     }
 
-    useEffect( () => {
-        isThereAnActiveSession();
-    }, [])
+    useEffect(() => {
+        const checkSession = async () => {
+            await isThereAnActiveSession();
+        };
+
+        checkSession();
+    }, []);
     
+    if (isAuthenticated === null) {
+        return null; 
+    }
 
+    if (isAuthenticated) {
+        return (
+            <>
+                <ClientNavbar user={userData}/>
+            </>
+        );
+    }
 
-    return (
-        isAuthenticated ? (
-            <ClientNavbar />
-        ) : (
-            <Navigate to="/client/login" replace={true} />
-        )
-    );
+    return <Navigate to="/client/login" replace={true} />;
 }

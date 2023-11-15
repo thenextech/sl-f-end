@@ -16,6 +16,7 @@ export default function ClientLoginForm() {
       
       const response = await fetch('http://localhost:8080/client/login', {
           method: 'POST',
+          credentials: 'include',
           body: formData
       });
         

@@ -6,8 +6,8 @@ import AddressBox from './AddressBox';
 import FidelityPointBox from './FidelityPointBox';
 import CatalogueVFPBox from './CatalogueVFPBox';
 
-export default function ClientNavbar() {
-
+export default function ClientNavbar( { user }) {
+  
   const [drawerClicked, setDrawerClicked] = useState(false);
 
   function handleDrawerClick() {
