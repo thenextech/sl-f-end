@@ -19,8 +19,8 @@ export default function HomeNavbar() {
   return (
     <>
     <div>
-      <Fog drawerClicked={drawerClicked} handleDrawerClick={handleDrawerClick} />
-      <SideBar drawerClicked={drawerClicked} handleDrawerClick={handleDrawerClick} items={[<HomeSideBtn/>, <HomeSideLinks/>]}/>
+      <Fog elementClicked={drawerClicked} handleElementClick={handleDrawerClick} />
+      <SideBar elementClicked={drawerClicked} handleElementClick={handleDrawerClick} items={[<HomeSideBtn/>, <HomeSideLinks/>]}/>
       <div className="text-black flex items-center justify-between px-3 mt-3 md:px-[25px]">
         <div className="flex items-center">
           <Drawer handleDrawerClick={handleDrawerClick}/>

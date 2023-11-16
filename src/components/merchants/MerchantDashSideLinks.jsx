@@ -8,10 +8,10 @@ export default function MerchantDashSideLinks() {
             <p className="font-semibold sm:text-[16px] md:text-[18px]"><Link to="#">Caisse</Link></p>
         </div>
         <div className="py-3 hover:cursor-pointer">
-            <p className="font-semibold sm:text-[16px] md:text-[18px]">Commandes</p>
+            <p className="font-semibold sm:text-[16px] md:text-[18px]"><Link to="/merchant/orders">Commandes</Link></p>
         </div>  
         <div className="py-3 hover:cursor-pointer">
-            <p className="font-semibold sm:text-[16px] md:text-[18px]">Produits</p>
+            <p className="font-semibold sm:text-[16px] md:text-[18px]"><Link to="/merchant/category">Produits</Link></p>
         </div>   
         <div className="py-3 hover:cursor-pointer">
             <p className="font-semibold sm:text-[16px] md:text-[18px]">Offres</p>

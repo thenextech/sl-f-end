@@ -5,7 +5,7 @@ import { FiPrinter } from "react-icons/fi";
 
 export default function MerchantEnteredOrder() {
   return (
-    <div className="h-[190px] rounded-[10px] shadow-my mt-6">
+    <div className="h-[190px] rounded-[10px] shadow-my mt-4 sm:mt-6">
         <div className="w-[96%] md:w-[98%] mx-auto">
             <div className="flex items-center w-[200px] sm:w-[210px] justify-between pt-1">
                 <p className="font-bold sm:text-[20px]">#1734</p>

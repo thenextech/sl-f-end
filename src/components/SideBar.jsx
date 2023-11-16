@@ -1,14 +1,14 @@
 import React from 'react'
 import logo from '../assets/images/shopLoc.png'
 
-export default function SideBar({ drawerClicked, handleDrawerClick, items }) {
+export default function SideBar({elementClicked, handleElementClick, items }) {
 
     function handleClick() {
-        handleDrawerClick()
+        handleElementClick()
     }
 
   return (
-    <div className={drawerClicked ? "w-[55%] sm:w-[45%]  md:w-[35%] lg:w-[20%] h-[100%] bg-white fixed top-0 shadow-xl flex flex-col items-center z-40" : "fixed left-[150%]"} onClick={handleClick}>
+    <div className={elementClicked ? "w-[55%] sm:w-[45%]  md:w-[35%] lg:w-[20%] h-[100%] bg-white fixed top-0 shadow-xl flex flex-col items-center z-40" : "fixed left-[150%]"} onClick={handleClick}>
         <div className="w-[75%] h-[100%] flex flex-col justify-between">
             <div>
                 {items.map((item) => (

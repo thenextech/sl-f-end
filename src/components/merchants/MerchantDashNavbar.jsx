@@ -15,8 +15,8 @@ export default function MerchantDashNavbar() {
   
     return (
       <div>
-        <Fog drawerClicked={drawerClicked} handleDrawerClick={handleDrawerClick} />
-        <SideBar drawerClicked={drawerClicked} handleDrawerClick={handleDrawerClick} items={[[<LogoutBtn/>, <MerchantDashSideLinks />]]}/>
+        <Fog elementClicked={drawerClicked} handleElementClick={handleDrawerClick} />
+        <SideBar elementClicked={drawerClicked} handleElementClick={handleDrawerClick} items={[[<LogoutBtn/>, <MerchantDashSideLinks />]]}/>
         <div className="text-black flex items-center justify-between px-3 mt-3 md:px-[25px]">
           <div className="flex items-center">
             <Drawer handleDrawerClick={handleDrawerClick}/>
