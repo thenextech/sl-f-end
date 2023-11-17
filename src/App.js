@@ -8,6 +8,7 @@ import ClientLogin from "./pages/ClientLogin";
 import ClientDashboard from "./pages/ClientDashboard";
 import ClientVerify from "./components/clients/ClientVerify";
 import MerchantCategories from "./pages/MerchantCategories";
+import MerchantDashboard from "./pages/MerchantDashboard";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/merchant/login" element = {<MerchantLogin />} />
           <Route path="/merchant/orders" element = {<MerchantOrders />} />
           <Route path="/merchant/category" element = {<MerchantCategories />} />
+          <Route path="/merchant/dashboard" element = {<MerchantDashboard />} />
           <Route path="/client/login" element = {<ClientLogin />} />
           <Route path="/client/dashboard" element = {<ClientDashboard />}/>
           <Route path="/client/register" element = {<ClientRegister />} />

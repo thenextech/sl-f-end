@@ -57,7 +57,7 @@ export default function MerchantOrders() {
                     </div>
                 </div>
             </div>
-            <div>
+            <div className="md:mt-8">
              <MerchantEnteredOrder />
              <MerchantEnteredOrder />
              <MerchantEnteredOrder />

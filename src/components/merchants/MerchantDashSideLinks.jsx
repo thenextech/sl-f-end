@@ -5,6 +5,9 @@ export default function MerchantDashSideLinks() {
     return (
       <div className="mt-4">
         <div className="py-3 hover:cursor-pointer">
+            <p className="font-semibold sm:text-[16px] md:text-[18px]"><Link to="/merchant/dashboard">Tableau de bord</Link></p>
+        </div> 
+        <div className="py-3 hover:cursor-pointer">
             <p className="font-semibold sm:text-[16px] md:text-[18px]"><Link to="#">Caisse</Link></p>
         </div>
         <div className="py-3 hover:cursor-pointer">
@@ -15,10 +18,7 @@ export default function MerchantDashSideLinks() {
         </div>   
         <div className="py-3 hover:cursor-pointer">
             <p className="font-semibold sm:text-[16px] md:text-[18px]">Offres</p>
-        </div>  
-        <div className="py-3 hover:cursor-pointer">
-            <p className="font-semibold sm:text-[16px] md:text-[18px]">Stats</p>
-        </div>  
+        </div>   
         <div className="py-3 hover:cursor-pointer">
             <p className="font-semibold sm:text-[16px] md:text-[18px]">Profil</p>
         </div>  
