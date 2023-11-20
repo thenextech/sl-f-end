@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 export default function ClientLoginForm() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
+    const [error, setErrors] = useState("");
 
     const navigate = useNavigate();
   
@@ -25,7 +25,7 @@ export default function ClientLoginForm() {
         navigate(url['url']);
       } else {
         const errorMessage = await response.json();
-        setError(errorMessage['error']);
+        setErrors(errorMessage['error']);
       }
     };
   

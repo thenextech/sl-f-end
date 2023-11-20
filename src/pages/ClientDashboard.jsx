@@ -16,7 +16,6 @@ export default function ClientDashboard() {
             if (response.ok) {
                 const data = await response.json();
                 setIsAuthenticated(true);
-                console.log(data);
                 setUserData(data.object);
             } else {
                 setIsAuthenticated(false);

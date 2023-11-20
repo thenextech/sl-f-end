@@ -128,11 +128,10 @@ export default function ClientRegisterForm() {
           navigate(url['url']);
         } else {
           const errorMessage = await response.json();
-          newErrors.authFailed = errorMessage;
+          newErrors.authFailed = errorMessage['error'];
           setErrors(newErrors);
         }
       } else {
-        console.log(newErrors);
         setErrors(newErrors);
       }
     };
@@ -193,9 +192,6 @@ export default function ClientRegisterForm() {
           </div>
           {errors.emailAddress && (
           <p className="ml-1 text-[#ff0000] text-[10px]">{errors.emailAddress}</p>
-          )}
-          {errors.alreadyUsedEmail && (
-              <p className="ml-1 text-[#ff0000] text-[10px]">{errors.alreadyUsedEmail}</p>
           )}
         </div>
         <div className="flex flex-col mb-2">

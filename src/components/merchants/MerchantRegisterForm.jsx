@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import {AiFillInfoCircle} from 'react-icons/ai';
 
 export default function MerchantRegisterForm() {
-    const [companyName, setCompanyName] = useState("");
+    const [businessName, setbusinessName] = useState("");
     const [representative, setRepresentative] = useState("");
     const [emailAddress, setEmailAddress] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPwd, setConfirmPwd] = useState("");
     const [address1, setAddress1] = useState("");
     const [address2, setAddress2] = useState("");
     const [city, setCity] = useState("");
@@ -13,6 +16,9 @@ export default function MerchantRegisterForm() {
 
     const [errors, setErrors] = useState({});
     const [selectedCommunes, setSelectedCommunes] = useState([]);
+    const [showPasswordRules, setShowPasswordRules] = useState(false);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
       // Lorsque la valeur de "city" change, effectuer une requête à l'API Geonames
@@ -40,7 +46,7 @@ export default function MerchantRegisterForm() {
     }, [city]);
 
   
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
       event.preventDefault();
       const newErrors = {};
       
@@ -57,13 +63,23 @@ export default function MerchantRegisterForm() {
         newErrors.emailAddress = "Veuillez entrer une adresse e-mail valide";
       }
 
+      // Validation Mot de passe
+      if (password.length < 8 || !/(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*])/.test(password)) {
+        newErrors.password = "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un symbole";
+      }
+
+      // Validation Retapez votre mot de passe
+      if (confirmPwd !== password) {
+        newErrors.confirmPwd = "Les mots de passe ne correspondent pas";
+      }
+
       // Validation logic for Adresse ligne 1
       if (!/^[-'a-zA-Z0-9, ]+$/.test(address1)) {
         newErrors.address1 = "Adresse non valide. Utilisez des lettres minuscules, des lettres majuscules, des chiffres, des symboles comme -, ,, et '";
       }
 
       // Validation logic for Adresse ligne 2
-      if (address2 != "" && !/^[-'a-zA-Z0-9, ]+$/.test(address2)) {
+      if (address2 !== "" && !/^[-'a-zA-Z0-9, ]+$/.test(address2)) {
         newErrors.address2 = "Adresse non valide. Utilisez des lettres minuscules, des lettres majuscules, des chiffres, des symboles comme -, ,, et '";
       }
 
@@ -73,8 +89,8 @@ export default function MerchantRegisterForm() {
       }
 
       // Validation logic for Nom de la société (Company Name)
-      if (!/^[A-Za-z0-9\s]+$/.test(companyName)) {
-        newErrors.companyName = "Le nom de la société ne peut contenir que des majuscules, des minuscules, des espaces et des chiffres";
+      if (!/^[A-Za-z0-9\s]+$/.test(businessName)) {
+        newErrors.businessName = "Le nom de la société ne peut contenir que des majuscules, des minuscules, des espaces et des chiffres";
       }
       
       // Validation logic for Représentant de la société (Representative)
@@ -83,12 +99,34 @@ export default function MerchantRegisterForm() {
     }
 
       if (Object.keys(newErrors).length === 0) {
-        // Soumettre le formulaire si aucune erreur n'est présente
-        // Placez ici votre logique de soumission du formulaire
+        const formData = new FormData();
+        
+        formData.append("businessName", businessName);
+        formData.append("representative", representative);
+        formData.append("email", emailAddress);
+        formData.append("password", password);
+        formData.append("lineAddress1", address1);
+        formData.append("lineAddress2", address2);
+        formData.append("city", city);
+        formData.append("postalCode", postalCode);
+        formData.append("acceptTerms", acceptTerms);
+
+        const response = await fetch('http://localhost:8080/merchant/register', {
+          method: 'POST',
+          body: formData
+        })
+
+        if (response.ok) {
+          const url = await response.json();
+          navigate(url['url']);
+        } else {
+          const errorMessage = await response.json();
+          newErrors.authFailed = errorMessage;
+          setErrors(newErrors);
+        }
       } else {
         setErrors(newErrors);
       }
-
     };
   
     return (
@@ -100,14 +138,14 @@ export default function MerchantRegisterForm() {
           <div className="h-[25px] md:w-[70%] sm:h-[30px] w-full bg-[#ECECEC] rounded-[50px] w-[50%] font-normal flex items-center">
             <input
               type="text"
-              value={companyName}
-              onChange={(event) => setCompanyName(event.target.value)}
+              value={businessName}
+              onChange={(event) => setbusinessName(event.target.value)}
               required
               className="bg-[#ECECEC] rounded-[50px] text-[12px] sm:text-[13px] ml-2 focus:outline-none w-[95%] "
             />
           </div>
-          {errors.companyName && (
-          <p className="ml-1 text-[#ff0000] text-[10px]">{errors.companyName}</p>
+          {errors.businessName && (
+          <p className="ml-1 text-[#ff0000] text-[10px]">{errors.businessName}</p>
           )}
         </div>
         <div className="flex flex-col mb-2">
@@ -142,6 +180,57 @@ export default function MerchantRegisterForm() {
           </div>
           {errors.emailAddress && (
           <p className="ml-1 text-[#ff0000] text-[10px]">{errors.emailAddress}</p>
+          )}
+        </div>
+        <div className="flex flex-col mb-2">
+          <label className="font-bold text-[11px] sm:text-[13px] ml-1">
+            Mot de passe*
+          </label>
+          <div className="h-[25px] md:w-[70%] sm:h-[30px] w-full bg-[#ECECEC] rounded-[50px] w-[50%] font-normal flex items-center justify-between">
+            <input
+              type="password"
+              value={password}
+              name="password"
+              onChange={(event) => setPassword(event.target.value)}
+              required
+              className="bg-[#ECECEC] rounded-[50px] text-[12px] sm:text-[13px] ml-2 focus:outline-none w-[95%] md:w-[95%]"
+            />
+            <AiFillInfoCircle className="hover:cursor-pointer mr-1"
+              onMouseEnter={() => setShowPasswordRules(true)}
+              onMouseLeave={() => setShowPasswordRules(false)}></AiFillInfoCircle>
+          </div>
+          {showPasswordRules && (
+          <p className=" ml-1 text-gray text-[10px] font-normal">
+            Le mot de passe doit être composé de :
+            <br />
+            - Au moins 8 caractères
+            <br />
+            - Une majuscule
+            <br />
+            - Une minuscule
+            <br />
+            - Un symbole
+          </p>
+          )}
+          {errors.password && (
+            <p className="ml-1 text-[#ff0000] text-[10px]">{errors.password}</p>
+          )}
+        </div>
+        <div className="flex flex-col mb-2">
+          <label className="font-bold text-[11px] sm:text-[13px] ml-1">
+            Retapez votre mot de passe*
+          </label>
+          <div className="h-[25px] md:w-[70%] sm:h-[30px] w-full bg-[#ECECEC] rounded-[50px] w-[50%] font-normal flex items-center">
+          <input
+            type="password"
+            value={confirmPwd}
+            onChange={(event) => setConfirmPwd(event.target.value)}
+            required
+            className="bg-[#ECECEC] rounded-[50px] text-[12px] sm:text-[13px] ml-2 focus:outline-none w-[95%]"
+          />
+          </div>
+          {errors.confirmPwd && (
+            <p className="ml-1 text-[#ff0000] text-[10px]">{errors.confirmPwd}</p>
           )}
         </div>
         <div className="flex flex-col mb-2">
@@ -218,8 +307,11 @@ export default function MerchantRegisterForm() {
           <p className="font-bold text-[9px] lg:text-[12px] sm:text-[11px] ml-2 ml-1">J'accepte les <Link to="#" className="text-[#3C24D1]">conditions générales d'utilisation*</Link></p>
         </div>
         <div className="w-full md:w-[70%]  flex flex-col items-center mt-1 mb-3">
+          {errors.authFailed && (
+              <p className="ml-1 text-[#ff0000] text-[10px]">{errors.authFailed}</p>
+            )}
           <button type="submit" className="mt-3 text-center rounded-[50px] w-full bg-[#3C24D1]  py-1 text-white lg:w-[60%] lg:py-1 lg:text-[18px]">Soumettre ma demande</button>
-          <p className="text-[9px] lg:text-[12px] mt-1 font-semibold">Déjà partenaire ? <Link to="/m/login" className="text-[#3C24D1]">Accédez à votre espace</Link></p>
+          <p className="text-[9px] lg:text-[12px] mt-1 font-semibold">Déjà partenaire ? <Link to="/merchant/login" className="text-[#3C24D1]">Accédez à votre espace</Link></p>
         </div>
       </form>
     )
