@@ -10,6 +10,7 @@ import ClientVerify from "./components/clients/ClientVerify";
 import MerchantCategories from "./pages/MerchantCategories";
 import MerchantDashboard from "./pages/MerchantDashboard";
 import MerchantVerify from "./components/merchants/MerchantVerify";
+import AdminDashboard from "./pages/AdminDashboard";
 
 function App() {
   return (
@@ -27,6 +28,8 @@ function App() {
           <Route path="/client/dashboard" element = {<ClientDashboard />}/>
           <Route path="/client/register" element = {<ClientRegister />} />
           <Route path="/client/verify" element = {<ClientVerify />} />
+          <Route path="/admin/dashboard" element = {<AdminDashboard />} />
+
         </Routes>
       </BrowserRouter>
     </div>
