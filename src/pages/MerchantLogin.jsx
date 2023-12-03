@@ -1,14 +1,14 @@
 import React from 'react'
 import HomeNavbar from '../components/HomeNavbar'
 import Footer from '../components/Footer'
-import MerchantRegisterHero from '../components/merchants/MerchantRegisterHero'
+import MerchantLoginHero from '../components/merchants/MerchantLoginHero'
 import Card from '../components/Card'
 
-function MerchantRegister() {
+function MerchantLogin() {
   return (
     <>
         <HomeNavbar />
-        <MerchantRegisterHero />
+        <MerchantLoginHero />
         <div className="lg:flex items-center md:flex items-center">
           <Card title="Augmentation des ventes" paragraph="Attirez d’avantage de clients qui préfèrent commander en ligne "/>
           <Card title="Optimisation des opérations en magasin" paragraph="Organisez mieux vos opérations en minimisant le temps d’attente des clients"/>
@@ -19,4 +19,4 @@ function MerchantRegister() {
   )
 }
 
-export default MerchantRegister
+export default MerchantLogin
