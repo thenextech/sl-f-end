@@ -7,6 +7,8 @@ export default function MerchantLoginForm() {
     const [error, setErrors] = useState("");
 
     const navigate = useNavigate();
+
+    const API_URL = process.env.REACT_APP_API_URL;
   
     const handleSubmit = async (event) => {
       event.preventDefault();
@@ -14,7 +16,7 @@ export default function MerchantLoginForm() {
         formData.append('email', emailAddress);
         formData.append('password', password);
       
-      const response = await fetch('http://localhost:8080/merchant/login', {
+      const response = await fetch(`${API_URL}/merchant/login`, {
           method: 'POST',
           credentials: 'include',
           body: formData

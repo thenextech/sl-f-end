@@ -7,6 +7,8 @@ export default function ClientLoginForm() {
     const [error, setErrors] = useState("");
 
     const navigate = useNavigate();
+
+    const API_URL = process.env.REACT_APP_API_URL;
   
     const handleSubmit = async (event) => {
       event.preventDefault();
@@ -14,7 +16,7 @@ export default function ClientLoginForm() {
         formData.append('email', email);
         formData.append('password', password);
       
-      const response = await fetch('http://localhost:8080/client/login', {
+      const response = await fetch(`${API_URL}/client/login`, {
           method: 'POST',
           credentials: 'include',
           body: formData

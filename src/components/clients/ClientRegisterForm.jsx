@@ -4,7 +4,7 @@ import {AiFillInfoCircle} from 'react-icons/ai';
 
 export default function ClientRegisterForm() {
 
-    const baseURL = "http://localhost:8080";
+  const API_URL = process.env.REACT_APP_API_URL;
 
     const [lastName, setLastName] = useState("");
     const [firstName, setFirstName] = useState("");
@@ -118,7 +118,7 @@ export default function ClientRegisterForm() {
         formData.append('city', city);
         formData.append('postalCode', postalCode);
 
-        const response = await fetch('http://localhost:8080/client/register', {
+        const response = await fetch(`${API_URL}/client/register`, {
           method: 'POST',
           body: formData
         })

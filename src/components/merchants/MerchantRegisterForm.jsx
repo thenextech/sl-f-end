@@ -20,6 +20,8 @@ export default function MerchantRegisterForm() {
 
     const navigate = useNavigate();
 
+    const API_URL = process.env.REACT_APP_API_URL;
+
     useEffect(() => {
       // Lorsque la valeur de "city" change, effectuer une requête à l'API Geonames
       if (city) {
@@ -99,21 +101,23 @@ export default function MerchantRegisterForm() {
     }
 
       if (Object.keys(newErrors).length === 0) {
-        const formData = new FormData();
-        
-        formData.append("businessName", businessName);
-        formData.append("representative", representative);
-        formData.append("email", emailAddress);
-        formData.append("password", password);
-        formData.append("lineAddress1", address1);
-        formData.append("lineAddress2", address2);
-        formData.append("city", city);
-        formData.append("postalCode", postalCode);
-        formData.append("acceptTerms", acceptTerms);
 
-        const response = await fetch('http://localhost:8080/merchant/register', {
+        const response = await fetch(`${API_URL}/merchant/register`, {
           method: 'POST',
-          body: formData
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            businessName: businessName,
+            representative: representative,
+            email: emailAddress,
+            password: password,
+            lineAddress1: address1,
+            lineAddress2: address2,
+            city: city,
+            postalCode: postalCode,
+            acceptTerms: acceptTerms
+          })
         })
 
         if (response.ok) {
@@ -121,7 +125,7 @@ export default function MerchantRegisterForm() {
           navigate(url['url']);
         } else {
           const errorMessage = await response.json();
-          newErrors.authFailed = errorMessage;
+          newErrors.authFailed = errorMessage['error'];
           setErrors(newErrors);
         }
       } else {

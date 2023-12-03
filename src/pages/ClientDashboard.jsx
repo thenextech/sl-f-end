@@ -6,9 +6,11 @@ export default function ClientDashboard() {
     const [isAuthenticated, setIsAuthenticated] = useState(null);
     const [userData, setUserData] = useState({});
 
+    const API_URL = process.env.REACT_APP_API_URL;
+
     const isThereAnActiveSession = async () => {
         try {
-            const response = await fetch('http://localhost:8080/client/dashboard', {
+            const response = await fetch(`${API_URL}/client/dashboard`, {
                 credentials: 'include',
                 method: 'GET'
             });

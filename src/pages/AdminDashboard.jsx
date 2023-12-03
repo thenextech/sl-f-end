@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+/*import React, { useEffect, useState, useRef } from 'react';
 import { Navigate } from 'react-router-dom';
 import ClientNavbar from '../components/clients/ClientNavbar';
 import 'datatables.net-dt/css/jquery.dataTables.css';
@@ -15,10 +15,12 @@ export default function AdminDashboard() {
     const [selectedSection, setSelectedSection] = useState('merchants');
     const tableRef = useRef(null);
 
+    const API_URL = process.env.REACT_APP_API_URL;
+
     useEffect(() => {
         const isAdminSessionActive = async () => {
             try {
-                const response = await fetch('http://localhost:8080/admin/dashboard', {
+                const response = await fetch(`${API_URL}/admin/dashboard`, {
                     credentials: 'include',
                     method: 'GET',
                 });
@@ -40,7 +42,7 @@ export default function AdminDashboard() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const merchantsResponse = await fetch('http://localhost:8080/merchants/all', {
+                const merchantsResponse = await fetch(`${API_URL}/merchants/all`, {
                     credentials: 'include',
                     method: 'GET',
                 });
@@ -103,7 +105,7 @@ export default function AdminDashboard() {
                     }
                 }
     
-                const response = await fetch(`http://localhost:8080/merchants/${data.id}`, {
+                const response = await fetch(`${API_URL}/merchants/${data.id}`, {
                     credentials: 'include',
                     method: 'PUT',
                     headers: {
@@ -238,4 +240,4 @@ export default function AdminDashboard() {
     }
 
     return <p>Chargement...</p>;
-}
+}*/

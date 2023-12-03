@@ -6,9 +6,11 @@ export default function MerchantDashboard() {
     const [isAuthenticated, setIsAuthenticated] = useState(null);
     const [merchantData, setMerchantData] = useState({});
 
+    const API_URL = process.env.REACT_APP_API_URL;
+
     const isThereAnActiveSession = async () => {
         try {
-            const response = await fetch('http://localhost:8080/merchant/dashboard', {
+            const response = await fetch(`${API_URL}/merchant/dashboard`, {
                 credentials: 'include',
                 method: 'GET'
             });
@@ -16,7 +18,6 @@ export default function MerchantDashboard() {
             if (response.ok) {
                 const data = await response.json();
                 setIsAuthenticated(true);
-                console.log(data.object);
                 setMerchantData(data.object);
             } else {
                 setIsAuthenticated(false);

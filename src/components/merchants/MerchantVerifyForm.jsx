@@ -6,6 +6,8 @@ export default function MerchantVerifyForm() {
     const [error, setError] = useState("");
 
     const navigate = useNavigate();
+
+    const API_URL = process.env.REACT_APP_API_URL;
   
     const handleSubmit = async (event) => {
       event.preventDefault();
@@ -13,7 +15,7 @@ export default function MerchantVerifyForm() {
         formData.append('code', code);
       
       try {
-        const response = await fetch('http://localhost:8080/merchant/verify', {
+        const response = await fetch(`${API_URL}/merchant/verify`, {
           method: 'POST',
           credentials: 'include',
           body: formData

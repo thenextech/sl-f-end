@@ -13,13 +13,15 @@ export default function MerchantDashNavbar({ businessName }) {
 
     const navigate = useNavigate();
 
+    const API_URL = process.env.REACT_APP_API_URL;
+
     function handleDrawerClick() {
       setDrawerClicked(!drawerClicked);
     }
 
     const handleLogoutClick = async (event) => {
       console.log('lààà');
-      const response = await fetch('http://localhost:8080/merchant/logout', {
+      const response = await fetch(`${API_URL}/merchant/logout`, {
           method: 'GET',
           credentials: 'include',
       });

@@ -6,6 +6,8 @@ export default function ClientVerifyForm() {
     const [error, setError] = useState("");
 
     const navigate = useNavigate();
+
+    const API_URL = process.env.REACT_APP_API_URL;
   
     const handleSubmit = async (event) => {
       event.preventDefault();
@@ -13,7 +15,7 @@ export default function ClientVerifyForm() {
         formData.append('code', code);
       
       try {
-        const response = await fetch('http://localhost:8080/client/verify', {
+        const response = await fetch(`${API_URL}/client/verify`, {
           method: 'POST',
           credentials: 'include',
           body: formData
