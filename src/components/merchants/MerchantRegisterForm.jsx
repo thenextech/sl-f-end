@@ -120,12 +120,18 @@ export default function MerchantRegisterForm() {
           })
         })
 
+        console.log(response);
+        console.log(response.ok);
+
         if (response.ok) {
           const url = await response.json();
           console.log(url);
           navigate(url['url']);
+          console.log('130');
         } else {
+          console.log('here ?');
           const errorMessage = await response.json();
+          console.log(errorMessage);
           newErrors.authFailed = errorMessage['error'];
           setErrors(newErrors);
         }
