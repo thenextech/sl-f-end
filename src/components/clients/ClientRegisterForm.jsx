@@ -108,23 +108,25 @@ export default function ClientRegisterForm() {
       }
 
       if (Object.keys(newErrors).length === 0) {
-        const formData = new FormData();
-        formData.append('firstName', firstName);
-        formData.append('lastName', lastName);
-        formData.append('email', emailAddress);
-        formData.append('password', password);
-        formData.append('lineAddress1', address1);
-        formData.append('lineAddress2', address2);
-        formData.append('city', city);
-        formData.append('postalCode', postalCode);
 
         const response = await fetch(`${API_URL}/client/register`, {
           method: 'POST',
-          body: formData
+          body: JSON.stringify({
+            firstName: firstName,
+            lastName: lastName,
+            email: emailAddress,
+            password: password,
+            lineAddress1: address1,
+            lineAddress2: address2,
+            city: city,
+            postalCode: postalCode,
+            acceptTerms: acceptTerms
+          })
         })
 
         if (response.ok) {
           const url = await response.json();
+          console.log(url);
           navigate(url['url']);
         } else {
           const errorMessage = await response.json();

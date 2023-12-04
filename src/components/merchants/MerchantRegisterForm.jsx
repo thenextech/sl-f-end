@@ -122,6 +122,7 @@ export default function MerchantRegisterForm() {
 
         if (response.ok) {
           const url = await response.json();
+          console.log(url);
           navigate(url['url']);
         } else {
           const errorMessage = await response.json();
