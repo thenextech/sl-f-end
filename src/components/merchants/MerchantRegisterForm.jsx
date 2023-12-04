@@ -49,6 +49,10 @@ export default function MerchantRegisterForm() {
 
   
     const handleSubmit = async (event) => {
+
+      console.log('53');
+
+      
       event.preventDefault();
       const newErrors = {};
       
@@ -100,7 +104,12 @@ export default function MerchantRegisterForm() {
       newErrors.representative = "Le représentant de la société ne peut contenir que des majuscules, des minuscules, des espaces et les symboles ' et -";
     }
 
+
+      console.log('107');
+
       if (Object.keys(newErrors).length === 0) {
+
+        console.log('105');
 
         const response = await fetch(`${API_URL}/merchant/register`, {
           method: 'POST',
