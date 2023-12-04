@@ -52,7 +52,7 @@ export default function MerchantRegisterForm() {
 
       console.log('53');
 
-      
+
       event.preventDefault();
       const newErrors = {};
       
@@ -110,6 +110,8 @@ export default function MerchantRegisterForm() {
       if (Object.keys(newErrors).length === 0) {
 
         console.log('105');
+
+        console.log(API_URL);
 
         const response = await fetch(`${API_URL}/merchant/register`, {
           method: 'POST',
