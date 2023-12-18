@@ -8,7 +8,7 @@ export default function MerchantDashboard() {
 
     const API_URL = process.env.REACT_APP_API_URL;
 
-    /*const isThereAnActiveSession = async () => {
+    const isThereAnActiveSession = async () => {
         try {
             const response = await fetch(`${API_URL}/merchant/dashboard`, {
                 credentials: 'include',
@@ -38,9 +38,9 @@ export default function MerchantDashboard() {
     
     if (isAuthenticated === null) {
         return null; 
-    }*/
+    }
     
-    if (isAuthenticated === null) {
+    if (isAuthenticated) {
         return (
             <>
                 <MerchantDashNavbar businessName={merchantData.businessName}/>
