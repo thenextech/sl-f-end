@@ -11,26 +11,30 @@ import MerchantCategories from "./pages/MerchantCategories";
 import MerchantDashboard from "./pages/MerchantDashboard";
 import MerchantVerify from "./components/merchants/MerchantVerify";
 import AdminDashboard from "./pages/AdminDashboard";
+import MerchantProducts from "./pages/MerchantProducts";
+import { ShoppingCartProvider } from "./components/clients/shoppingCart/ShoppingCartContext";
 
 function App() {
   return (
     <div>
       <BrowserRouter>
-        <Routes>
-          <Route index element = {<Home />} />
-          <Route path="/merchant/register" element = {<MerchantRegister />} />
-          <Route path="/merchant/login" element = {<MerchantLogin />} />
-          <Route path="/merchant/orders" element = {<MerchantOrders />} />
-          <Route path="/merchant/category" element = {<MerchantCategories />} />
-          <Route path="/merchant/dashboard" element = {<MerchantDashboard />} />
-          <Route path="/merchant/verify" element = {<MerchantVerify />} />
-          <Route path="/client/login" element = {<ClientLogin />} />
-          <Route path="/client/dashboard" element = {<ClientDashboard />}/>
-          <Route path="/client/register" element = {<ClientRegister />} />
-          <Route path="/client/verify" element = {<ClientVerify />} />
-          <Route path="/admin/dashboard" element = {<AdminDashboard />} />
-
-        </Routes>
+        <ShoppingCartProvider>
+          <Routes>
+            <Route index element = {<Home />} />
+            <Route path="/merchant/register" element = {<MerchantRegister />} />
+            <Route path="/merchant/login" element = {<MerchantLogin />} />
+            <Route path="/merchant/orders" element = {<MerchantOrders />} />
+            <Route path="/merchant/category" element = {<MerchantCategories />} />
+            <Route path="/merchant/dashboard" element = {<MerchantDashboard />} />
+            <Route path="/merchant/verify" element = {<MerchantVerify />} />
+            <Route path="/client/dashboard" element = {<ClientDashboard />}/>
+            <Route path="/client/merchantProducts/:idMerchant" element = {<MerchantProducts />} />
+            <Route path="/client/login" element = {<ClientLogin />} />
+            <Route path="/client/register" element = {<ClientRegister />} />
+            <Route path="/client/verify" element = {<ClientVerify />} />
+            <Route path="/admin/dashboard" element = {<AdminDashboard />} />
+          </Routes>        
+        </ShoppingCartProvider>
       </BrowserRouter>
     </div>
   )
