@@ -111,6 +111,9 @@ export default function ClientRegisterForm() {
 
         const response = await fetch(`${API_URL}/client/register`, {
           method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
           body: JSON.stringify({
             firstName: firstName,
             lastName: lastName,
