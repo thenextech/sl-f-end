@@ -57,11 +57,11 @@ export default function ClientDashboard() {
         checkSession();
     }, []);
     
-    if (isAuthenticated) {
+    if (isAuthenticated === null) {
         return null; 
     }
 
-    if (isAuthenticated === null) {
+    if (isAuthenticated) {
         return (
             <>
                 <ClientNavbar user={userData}/>
