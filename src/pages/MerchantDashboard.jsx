@@ -3,6 +3,9 @@ import { Navigate } from 'react-router-dom';
 import MerchantDashNavbar from '../components/merchants/MerchantDashNavbar';
 import Chart from 'chart.js/auto';
 import { FaSearch } from 'react-icons/fa';
+import { FaFilePdf } from 'react-icons/fa';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 const MerchantDashboard = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -127,6 +130,38 @@ const MerchantDashboard = () => {
         return null;
     }
 
+    const handleGeneratePDF = () => {
+        const pdf = new jsPDF();
+
+        // Ajoute le titre en haut du PDF
+        pdf.text("Facture générée sur Shoploc pour la période du " + startDate + " au " + endDate, 20, 20);
+
+        // Ajoute la table des chiffres d'affaires par jour
+        if (statistics.dailyRevenue && Object.keys(statistics.dailyRevenue).length > 0) {
+            const columns = ["Date", "Valeur"];
+            const rows = Object.entries(statistics.dailyRevenue).map(([date, value]) => [date, value + " €"]);
+
+            pdf.autoTable({
+                head: [columns],
+                body: rows,
+                startY: 30,
+                theme: 'grid'
+            });
+
+            // Ajoute le total en bas de la table
+            pdf.autoTable({
+                body: [['Total', Object.values(statistics.dailyRevenue).reduce((acc, val) => acc + val, 0) + ' €']],
+                startY: pdf.autoTable.previous.finalY + 10,
+                theme: 'grid'
+            });
+        } else {
+            pdf.text("Aucune donnée de chiffre d'affaires disponible par jour.", 20, 30);
+        }
+
+        // Enregistre ou affiche le PDF
+        pdf.save("facture_shoploc.pdf");
+    };
+
     if (isAuthenticated) {
         return (
             <>
@@ -171,6 +206,14 @@ const MerchantDashboard = () => {
                                         className="bg-green-500 text-white px-6 py-2 rounded-md mt-4 md:mt-0 md:ml-auto md:self-end"
                                     >
                                         <FaSearch size={20} />
+                                    </button>
+                                    <button
+                                        onClick={handleGeneratePDF}
+                                        type="button"
+                                        className="bg-red-500 text-white px-6 py-2 rounded-md mt-4"
+                                    >
+                                        <FaFilePdf size={20} />
+                                        La facture en PDF
                                     </button>
                                 </div>
 
