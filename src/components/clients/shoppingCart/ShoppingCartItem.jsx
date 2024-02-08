@@ -22,11 +22,11 @@ const computeTotalPrice = () => {
 }
   
   return (
-    <div className="flex w-[95%] mx-auto h-[100px] items-center border-b-2 border-gray-100 mb-2">
+    <div className="flex w-[95%] mx-auto h-[100px] items-center border-b-[0.5px] border-gray-100 mb-2 pb-2">
       <div className="w-[25px] h-[20px] bg-gray-200 rounded-[100%] text-center font-bold text-[12px]">{quantity}</div>
       <div className="relative flex w-full ml-1">
-        <div className="w-[90px] h-[90px] bg-gray-200 flex items-center justify-center">
-          <p className="font-semibold text-gray-700">{nom}</p>
+        <div className="w-[90px] h-[90px] bg-gray-200 flex items-center justify-center rounded-md">
+          <p className="font-semibold text-gray-700 text-center">{nom}</p>
         </div>
         <div className="ml-3">
           <p className="text-[13px]">{nom}</p>

@@ -21,11 +21,38 @@ export const ShoppingCartProvider = ({ children }) => {
     sessionStorage.removeItem('cart');
   };
 
-  const addToCart = (product) => {
-    const updatedCart = [...cartItems, product];
-    setCartItems(updatedCart);
-    updateCartInSessionStorage(updatedCart);
+  const addToCart = (productToAdd) => {
+    const existingProductIndex = cartItems.findIndex(
+      (product) => product.props.productId === productToAdd.props.productId
+    );
+  
+    if (existingProductIndex !== -1) {
+      const updatedCart = cartItems.map((product, index) => {
+        if (index === existingProductIndex) {
+          return {
+            ...product,
+            props: {
+              productId : product.props.productId,
+              nom: product.props.nom,
+              reference: product.props.reference,
+              businessName: product.props.businessName,
+              quantity: product.props.quantity + productToAdd.props.quantity,
+              price: product.props.price
+            }
+          };
+        }
+        return product;
+      });
+      setCartItems(updatedCart);
+      updateCartInSessionStorage(updatedCart);
+    } else {
+      const updatedCart = [...cartItems, productToAdd];
+      setCartItems(updatedCart);
+      updateCartInSessionStorage(updatedCart);
+    }
+    
   };
+  
 
   const removeItemFromCart = (productId) => {
     const updatedCart = cartItems.filter((item) => item.props.productId !== productId);

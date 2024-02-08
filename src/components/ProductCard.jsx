@@ -8,7 +8,6 @@ import ShoppingCartItem from './clients/shoppingCart/ShoppingCartItem';
 export default function ProductCard({ name, description, productId, category, status, stock, price, handleDeleteProduct, commercant, showDeleteIcon = true, businessName, handleModifyProduct}) {
   
   const { addToCart } = useShoppingCart();
-  const [identifier, setIdentifier] = useState(0);
   const [quantity, setQuantity] = useState(1);
 
   const formatPrice = (price) => {
@@ -23,13 +22,12 @@ export default function ProductCard({ name, description, productId, category, st
 
   const handleAddToCart = () => {
     addToCart(<ShoppingCartItem
-      productId={identifier}
+      productId={productId}
       nom={name}
       reference={description}
       businessName={businessName}
       quantity={quantity}
       price={price} />);
-    setIdentifier((prevIdentifier) => prevIdentifier + 1); 
   };
 
   const onDeleteClick = () => {

@@ -28,18 +28,20 @@ export default function ShoppingCartSideBar({elementClicked, handleElementClick,
                 </div>  : 
                 <>  
                     <div className="w-full h-[98%] flex flex-col justify-between">
-                        <div className="relative h-full">
-                            {items.map( item => <ShoppingCartItem
-                                productId={item.props.productId}
-                                nom={item.props.nom}
-                                quantity={item.props.quantity}
-                                reference={item.props.reference}
-                                price={item.props.price} 
-                                businessName={item.props.businessName}/>)}
-                            <div className="w-full h-[40px] absolute bottom-0 flex items-center justify-between border-b-2 border-gray-100">
+                        <div className="h-full overflow-auto">
+                            <div className="h-full ">
+                                {items.map( item => <ShoppingCartItem
+                                    productId={item.props.productId}
+                                    nom={item.props.nom}
+                                    quantity={item.props.quantity}
+                                    reference={item.props.reference}
+                                    price={item.props.price} 
+                                    businessName={item.props.businessName}/>)}
+                            </div>          
+                        </div>
+                        <div className="w-full h-[40px] bg-white flex items-center justify-between border-b-2 border-gray-100">
                                 <h1 className="ml-3 font-bold text-[20px] sm:text-[30px]">TOTAL</h1>
                                 <p className="mr-3 font-bold text-[20px] ">{computeTotalPrice()}</p>
-                            </div>            
                         </div>
                         <div className="w-[90%] mx-auto">
                             <ClearCart />
