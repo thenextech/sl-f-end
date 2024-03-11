@@ -12,6 +12,8 @@ import MerchantDashboard from "./pages/MerchantDashboard";
 import MerchantVerify from "./components/merchants/MerchantVerify";
 import AdminDashboard from "./pages/AdminDashboard";
 import MerchantProducts from "./pages/MerchantProducts";
+import ClientOrderOK from "./pages/ClientOrderOK";
+import OrderPaid from "./pages/OrderPaid";
 import { ShoppingCartProvider } from "./components/clients/shoppingCart/ShoppingCartContext";
 
 function App() {
@@ -28,11 +30,13 @@ function App() {
             <Route path="/merchant/dashboard" element = {<MerchantDashboard />} />
             <Route path="/merchant/verify" element = {<MerchantVerify />} />
             <Route path="/client/dashboard" element = {<ClientDashboard />}/>
-            <Route path="/client/merchantProducts/:idMerchant" element = {<MerchantProducts />} />
+            <Route path="/client/merchantProducts/:idMerchant/:idClient" element = {<MerchantProducts />} />
             <Route path="/client/login" element = {<ClientLogin />} />
             <Route path="/client/register" element = {<ClientRegister />} />
             <Route path="/client/verify" element = {<ClientVerify />} />
+            <Route path="/client/orderOK/:orderId" element= {<ClientOrderOK />}/>
             <Route path="/admin/dashboard" element = {<AdminDashboard />} />
+            <Route path="/orderPaid/:orderId" element= {<OrderPaid />}/>
           </Routes>        
         </ShoppingCartProvider>
       </BrowserRouter>

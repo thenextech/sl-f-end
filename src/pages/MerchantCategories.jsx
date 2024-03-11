@@ -467,6 +467,7 @@ export default function MerchantCategories() {
                     handleDeleteProduct={handleDeleteProduct}
                     commercant={true}
                     handleModifyProduct={handleModifyProductClicked}
+                    merchantId={merchantData.id}
                   />)}
           </div>
           }

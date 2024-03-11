@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import MerchantDashNavbar from '../components/merchants/MerchantDashNavbar';
 import MerchantEnteredOrder from '../components/merchants/MerchantEnteredOrder';
 import { IoMdSearch } from "react-icons/io";
@@ -8,6 +8,87 @@ export default function MerchantOrders() {
     const [entrantesClicked, setEntrantesClicked] = useState(true);
     const [approuveesClicked, setApprouveesClicked] = useState(false);
     const [annuleesClicked, setAnnuleesClicked] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(null);
+    const [merchantOrdersLines, setMerchantOrdersLines] = useState({});
+    const [merchantData, setMerchantData] = useState({});
+    const [searchValue, setSearchValue] = useState("");
+    const [products, setProducts] = useState([]);
+
+    const API_URL = process.env.REACT_APP_API_URL;
+
+    const isThereAnActiveSession = async () => {
+        try {
+            const response = await fetch(`${API_URL}/merchant/dashboard`, {
+                credentials: 'include',
+                method: 'GET',
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                const fetchedMerchantId = data.object.userId;
+
+                if (fetchedMerchantId) {
+                    setIsAuthenticated(true);
+                    setMerchantData(data.object);
+                } else {
+                    setIsAuthenticated(false);
+                }
+            } else {
+                setIsAuthenticated(false);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            setIsAuthenticated(false);
+        }
+    };
+
+    const fetchAllCurrentOrders = async (userId) => {
+        try {
+            const response = await fetch(`${API_URL}/orderlines/m/${userId}`, {
+                credentials: 'include',
+                method: 'GET',
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                // Transformation des données ici
+                const transformedOrders = Object.keys(data).map(orderId => {
+                    const orderItems = data[orderId];
+                    const clientName = orderItems[0]?.clientName || ""; // Assumer que tous les articles ont le même nom de client
+                    const orderContent = orderItems.map(item => item.productName).join(", ");
+                    const totalPrice = orderItems.reduce((acc, item) => acc + (item.unitPrice * item.quantity), 0).toFixed(2);
+
+                    return { orderId: parseInt(orderId), clientName, orderContent, totalPrice: `${totalPrice}€` };
+                });
+
+                // Trier par orderId décroissant
+                transformedOrders.sort((a, b) => b.orderId - a.orderId);
+                
+                setMerchantOrdersLines(transformedOrders);
+            } else {
+                console.log('fetching all order errors : ', response.error);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            setIsAuthenticated(false);
+        }
+    }
+
+    useEffect(() => {
+        const checkSession = async () => {
+            await isThereAnActiveSession();
+        };
+
+        checkSession();
+        
+    }, []);
+
+    useEffect(() => {
+        fetchAllCurrentOrders(merchantData.userId)
+    }, [merchantData]);
+
+    console.log(merchantOrdersLines);
+    console.log(merchantOrdersLines.length);
 
     function handleEntrantesClicked() {
         setApprouveesClicked(false);
@@ -32,15 +113,9 @@ export default function MerchantOrders() {
         <MerchantDashNavbar />
         <div className="w-[93%] mx-auto mt-2">
             <div className="sm:flex sm:justify-between">
-                <div className="flex w-[250px] sm:w-[270px] md:w-[290px] lg:w-[310px] justify-between">
+                <div className="flex w-[250px] sm:w-[270px] md:w-[290px] lg:w-[310px]">
                     <div className="hover:cursor-pointer" onClick={handleEntrantesClicked}>
-                        <p className={entrantesClicked ? "text-[15px] font-bold sm:text-[16px] md:text-[18px] lg:text-[20px] border-b-4 border-black" : "text-[15px] font-bold sm:text-[16px] md:text-[18px] lg:text-[20px]"}>Entrantes</p>
-                    </div>
-                    <div className="hover:cursor-pointer" onClick={handleApprouveesClicked}>
-                        <p className={approuveesClicked ? "text-[15px] font-bold sm:text-[16px] md:text-[18px] lg:text-[20px] border-b-4 border-black" : "text-[15px] font-bold sm:text-[16px] md:text-[18px] lg:text-[20px]"}>Approuvées</p>
-                    </div>
-                    <div className="hover:cursor-pointer" onClick={handleAnnuleesClicked}>
-                        <p className={annuleesClicked ? "text-[15px] font-bold sm:text-[16px] md:text-[18px] lg:text-[20px] border-b-4 border-black" : "text-[15px] font-bold sm:text-[16px] md:text-[18px] lg:text-[20px]" }>Annulées</p>
+                        <p className={entrantesClicked ? "text-[15px] font-semibold sm:text-[16px] md:text-[18px] lg:text-[20px] border-b-2 border-black" : "text-[15px] font-bold sm:text-[16px] md:text-[18px] lg:text-[20px]"}>Entrantes</p>
                     </div>
                 </div>
                 <div>
@@ -53,17 +128,24 @@ export default function MerchantOrders() {
                             placeholder="Chercher une commande"
                             name="orderSearch"
                             className="bg-[#ECECEC] rounded-[50px] text-[12px] sm:text-[13px] ml-2 focus:outline-none w-[95%]"
+                            value={searchValue}
+                            onChange={(e) => setSearchValue(e.target.value)}
                         />
                     </div>
                 </div>
             </div>
             <div className="md:mt-8">
-             <MerchantEnteredOrder />
-             <MerchantEnteredOrder />
-             <MerchantEnteredOrder />
-             <MerchantEnteredOrder />
-             <MerchantEnteredOrder />
-             <MerchantEnteredOrder />
+                  {merchantOrdersLines.length > 0 ? merchantOrdersLines
+                      .filter(order => order.orderId.toString().includes(searchValue))
+                      .map(({ orderId, clientName, orderContent, totalPrice }) => (
+                            <MerchantEnteredOrder 
+                                key={orderId} 
+                                orderId={`#${orderId}`} 
+                                clientName={clientName} 
+                                orderContent={orderContent} 
+                                totalPrice={totalPrice} 
+                            />
+                )) : null}
             </div>
         </div>
     </>

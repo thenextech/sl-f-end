@@ -12,6 +12,10 @@ export default function MerchantProducts() {
 
     const navigate = useNavigate();
     const { idMerchant } = useParams();
+    const { idClient } = useParams();
+    const userData = {
+      userId: idClient
+    }
     const [products, setProducts] = useState([]);
     const [merchant, setMerchant] = useState([]);
 
@@ -70,7 +74,7 @@ export default function MerchantProducts() {
   
     return (
         <>
-            <ClientNavbar />
+            <ClientNavbar user={userData} />
             <div className="w-[95%] mx-auto sm:mt-4 sm:w-[97%] flex justify-between items-center" onClick={goBackToDashboard}>
                 <MdKeyboardBackspace className="text-[45px] sm:text-[55px] md:text-[65px] hover:cursor-pointer "/>
                 <p className="text-[10px] sm:text-[13px] md:text-[16px] font-bold uppercase">{merchant.businessName}</p>
@@ -92,6 +96,7 @@ export default function MerchantProducts() {
                         productId={product.productId}
                         commercant={false}
                         businessName={merchant.businessName}
+                        idMerchant={idMerchant}
                     />)}
                     </div>
                 }               

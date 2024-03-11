@@ -1,14 +1,23 @@
-import React, { useState} from 'react'
+import React, { useEffect, useState} from 'react'
 import ModifyStock from './buttons/ModifyStock'
 import AddToCart from './buttons/AddToCart'
 import { MdDelete } from "react-icons/md";
 import { useShoppingCart } from './clients/shoppingCart/ShoppingCartContext';
 import ShoppingCartItem from './clients/shoppingCart/ShoppingCartItem';
 
-export default function ProductCard({ name, description, productId, category, status, stock, price, handleDeleteProduct, commercant, showDeleteIcon = true, businessName, handleModifyProduct}) {
+export default function ProductCard({ name, description, productId, category, status, stock, price, handleDeleteProduct, commercant, showDeleteIcon = true, businessName, handleModifyProduct, idMerchant}) {
   
   const { addToCart } = useShoppingCart();
   const [quantity, setQuantity] = useState(1);
+  const lowStockThreshold = 5; 
+  // Permet de désactiver le bouton ajouter au panier en fonction de la disponibilité du produit en stock
+  /*useEffect(() => {
+    if (quantity < stock) {
+      setNoStock(true);
+    } else {
+      setNoStock(false);
+    }
+  });*/
 
   const formatPrice = (price) => {
     const formattedPrice = parseFloat(price).toFixed(2);
@@ -27,7 +36,9 @@ export default function ProductCard({ name, description, productId, category, st
       reference={description}
       businessName={businessName}
       quantity={quantity}
-      price={price} />);
+      price={price}
+      merchantId={idMerchant}
+      />);
   };
 
   const onDeleteClick = () => {
@@ -51,10 +62,16 @@ export default function ProductCard({ name, description, productId, category, st
             <input
               type="number"
               value={quantity}
-              onChange={(e) => setQuantity(parseInt(e.target.value))}
+              min="1"
+              max={stock.toString()}
+              onChange={(e) => setQuantity(Math.max(1, Math.min(stock, parseInt(e.target.value))))}
               className="border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:border-blue-500 mr-2 w-[100px]"
-            /></div>}
-          {commercant ? <ModifyStock modifyProduct={modifyProduct}/>: <AddToCart handleAddToCart={handleAddToCart}/>}
+          /></div>}
+          {stock <= lowStockThreshold && stock > 0 && (
+            <p className="text-red-500 text-sm">Il ne reste plus que {stock} produit(s) en stock !</p>
+          )}
+          {stock === 0 && <p className="text-red-500 text-sm">Produit indisponible</p>}
+        {commercant ? <ModifyStock modifyProduct={modifyProduct} /> : <AddToCart handleAddToCart={handleAddToCart} stock={stock} quantity={quantity} />}
         </div>
     </div>
   )

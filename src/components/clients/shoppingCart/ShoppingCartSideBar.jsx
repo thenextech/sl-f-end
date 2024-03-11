@@ -1,23 +1,32 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ShoppingCartItem from './ShoppingCartItem'
 import PaymentBtn from '../../buttons/PaymentBtn'
 import ClearCart from '../../buttons/ClearCart';
 import { useShoppingCart } from './ShoppingCartContext';
+import { loadStripe} from '@stripe/stripe-js';
 
 
-export default function ShoppingCartSideBar({elementClicked, handleElementClick, numItems, items }) {
+export default function ShoppingCartSideBar({elementClicked, handleElementClick, numItems, items, user }) {
+
+    const [totalPrice, setTotalPrice] = useState(0);
+    const [totalFormattedPrice, setTotalFormattedPrice] = useState(0);
+
+    const computeTotalPrice = () => {
+        let result = 0;
+        items.map( item => result += parseFloat(item.props.price*item.props.quantity));
+        setTotalPrice(result);
+        setTotalFormattedPrice(formatPrice(result.toString()));
+    }
 
     const formatPrice = (price) => {
         const formattedPrice = parseFloat(price).toFixed(2);
         const [euros, cents] = formattedPrice.split('.');
         return `${euros}€${cents !== '00' ? cents : ''}`;
     };
-
-    const computeTotalPrice = () => {
-        let result = 0;
-        items.map( item => result += parseFloat(item.props.price*item.props.quantity));
-        return formatPrice(result.toString());
-    }
+    
+    useEffect( () => {
+        computeTotalPrice();
+    })
 
     return (
         <>
@@ -41,11 +50,11 @@ export default function ShoppingCartSideBar({elementClicked, handleElementClick,
                         </div>
                         <div className="w-full h-[40px] bg-white flex items-center justify-between border-b-2 border-gray-100">
                                 <h1 className="ml-3 font-bold text-[20px] sm:text-[30px]">TOTAL</h1>
-                                <p className="mr-3 font-bold text-[20px] ">{computeTotalPrice()}</p>
+                                <p className="mr-3 font-bold text-[20px] ">{totalFormattedPrice}</p>
                         </div>
                         <div className="w-[90%] mx-auto">
                             <ClearCart />
-                            <PaymentBtn />
+                            <PaymentBtn items={items} totalPrice={totalPrice} user={user}/>
                         </div>
                     </div>
                     

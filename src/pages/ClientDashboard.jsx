@@ -77,6 +77,7 @@ export default function ClientDashboard() {
                                 name={merchant.businessName}
                                 lineAddress1={merchant.lineAddress1}
                                 id={merchant.userId}
+                                clientId={userData.userId}
                             />
                         ))}
                     </div>

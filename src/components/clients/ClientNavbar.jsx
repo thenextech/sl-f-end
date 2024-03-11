@@ -27,7 +27,7 @@ export default function ClientNavbar( { user }) {
     setDrawerClicked(!drawerClicked);
   }
 
-  function handleCartBoxClick() {
+  function handleCartBoxClick() {;
     setCartClicked(!cartClicked);
   }
 
@@ -52,13 +52,13 @@ export default function ClientNavbar( { user }) {
       <Fog elementClicked={drawerClicked} handleElementClick={handleDrawerClick} />
       <SideBar elementClicked={drawerClicked} handleElementClick={handleDrawerClick} items={[<LogoutBtn handleBtnClick={handleLogoutClick}/>]}/>
       <Fog elementClicked={cartClicked} handleElementClick={handleCartBoxClick} />
-      <ShoppingCartSideBar elementClicked={cartClicked} numItems={numItems} items={cartItems}/>
+      <ShoppingCartSideBar elementClicked={cartClicked} numItems={numItems} items={cartItems} user={user}/>
       <div className="text-black flex items-center justify-between px-3 mt-3 md:px-[25px]">
         <div className="flex items-center">
           <Drawer handleDrawerClick={handleDrawerClick}/>
           <AddressBox />
         </div>
-        <div className="flex lg:w-[380px] sm:w-[190px] w-[110px] justify-between">
+        <div className="flex lg:w-[380px] sm:w-[190px] w-[110px] justify-evenly">
           <CatalogueVFPBox />
           <FidelityPointBox />
           <ShoppingCartNav handleBoxClick={handleCartBoxClick} numItems={numItems}/>
