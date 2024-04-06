@@ -16,7 +16,7 @@ export default function AdminLoginForm() {
         isActive: true
       }
       
-      const response = await fetch(`${API_URL}/admin/register`, {
+      const response = await fetch(`${API_URL}/admin/mock`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

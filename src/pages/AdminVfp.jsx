@@ -91,8 +91,7 @@ export default function AdminVfp() {
             dateStart: debutDate,
             description: '*Offre administrateur',
             dateEnd: endDate,
-            productId: 24,
-            userId: 34
+            userId: 30
           }
         )
       });
