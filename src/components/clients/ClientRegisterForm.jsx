@@ -11,44 +11,12 @@ export default function ClientRegisterForm() {
     const [emailAddress, setEmailAddress] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPwd, setConfirmPwd] = useState("");
-    const [address1, setAddress1] = useState("");
-    const [address2, setAddress2] = useState("");
-    const [city, setCity] = useState("");
-    const [postalCode, setPostalCode] = useState("");
     const [acceptTerms, setAcceptTerms] = useState(false);
-
     const [errors, setErrors] = useState({});
     const [showPasswordRules, setShowPasswordRules] = useState(false);
-    const [selectedCommunes, setSelectedCommunes] = useState([]);
     
     const navigate = useNavigate();
 
-
-    useEffect(() => {
-      // Lorsque la valeur de "city" change, effectuer une requête à l'API Geonames
-      if (city) {
-        const formattedCity = city.charAt(0).toUpperCase() + city.slice(1);
-        fetch(`https://geo.api.gouv.fr/communes?nom=${formattedCity}&fields=codesPostaux,nom`)
-          .then(response => response.json())
-          .then(data => {
-            const theCity = data.find(elt => elt.nom === formattedCity);
-            console.log(theCity);
-            if (theCity) {
-              setSelectedCommunes(theCity.codesPostaux);
-              setErrors({ ...errors, city: "" });
-            } else {
-              setErrors({ ...errors, city: "Veuillez saisir une ville française valide" });
-            }
-          })
-          .catch(error => {
-            console.error(error);
-            setErrors({ ...errors, city: "Erreur lors de la recherche du code postal" });
-          });
-      } else {
-        setPostalCode("");
-        setErrors({ ...errors, city: "" });
-      }
-    }, [city]);
 
     const handleSubmit = async (event) => {
       event.preventDefault();
@@ -92,21 +60,6 @@ export default function ClientRegisterForm() {
         newErrors.confirmPwd = "Les mots de passe ne correspondent pas";
       }
 
-      // Validation logic for Adresse ligne 1
-      if (!/^[-'a-zA-Z0-9, ]+$/.test(address1)) {
-        newErrors.address1 = "Adresse non valide. Utilisez des lettres minuscules, des lettres majuscules, des chiffres, des symboles comme -, ,, et '";
-      }
-
-      // Validation logic for Adresse ligne 2
-      if (!address2 === "" && !/^[-'a-zA-Z0-9, ]+$/.test(address2)) {
-        newErrors.address2 = "Adresse non valide. Utilisez des lettres minuscules, des lettres majuscules, des chiffres, des symboles comme -, ,, et '";
-      }
-
-      // Validation logic for Ville (City)
-      if (city === "") {
-        newErrors.city = "Le champ Ville est requis";
-      }
-
       if (Object.keys(newErrors).length === 0) {
 
         const response = await fetch(`${API_URL}/client/register`, {
@@ -119,17 +72,14 @@ export default function ClientRegisterForm() {
             lastName: lastName,
             email: emailAddress,
             password: password,
-            lineAddress1: address1,
-            lineAddress2: address2,
-            city: city,
-            postalCode: postalCode,
-            acceptTerms: acceptTerms
+            acceptTerms: acceptTerms,
+            status: 'ACTIVE'
           })
         })
 
         if (response.ok) {
           const url = await response.json();
-          console.log(url);
+
           navigate(url['url']);
         } else {
           const errorMessage = await response.json();
@@ -249,74 +199,6 @@ export default function ClientRegisterForm() {
           {errors.confirmPwd && (
             <p className="ml-1 text-[#ff0000] text-[10px]">{errors.confirmPwd}</p>
           )}
-        </div>
-        <div className="flex flex-col mb-2">
-          <label className="font-bold text-[11px] sm:text-[13px] ml-1">
-            Adresse ligne 1*
-          </label>
-          <div className="h-[25px] md:w-[70%] sm:h-[30px] w-full bg-[#ECECEC] rounded-[50px] w-[50%] font-normal flex items-center">
-          <input
-            type="text"
-            value={address1}
-            name="lineAddress1"
-            onChange={(event) => setAddress1(event.target.value)}
-            required
-            className="bg-[#ECECEC] rounded-[50px] text-[12px] sm:text-[13px] ml-2 focus:outline-none w-[95%]"
-          />
-          </div>
-          {errors.address1 && (
-            <p className="ml-1 text-[#ff0000] text-[10px]">{errors.address1}</p>
-          )}
-        </div>
-        <div className="flex flex-col mb-2">
-          <label className="font-bold text-[11px] sm:text-[13px] ml-1">
-            Adresse ligne 2
-          </label>
-          <div className="h-[25px] md:w-[70%] sm:h-[30px] w-full bg-[#ECECEC] rounded-[50px] w-[50%] font-normal flex items-center">
-          <input
-            type="text"
-            value={address2}
-            name="lineAddress2"
-            onChange={(event) => setAddress2(event.target.value)}
-            className="bg-[#ECECEC] rounded-[50px] text-[12px] sm:text-[13px] ml-2 focus:outline-none w-[95%]"
-          />
-          </div>
-          {errors.address2 && (
-            <p className="ml-1 text-[#ff0000] text-[10px]">{errors.address2}</p>
-          )}
-        </div>
-        <div className="flex justify-between w-full md:w-[70%]  mb-3">
-          <div className="flex flex-col w-[55%]">
-            <label className="font-bold text-[11px] sm:text-[13px] ml-1">
-              Ville*
-            </label>
-            <div className="h-[25px] sm:h-[30px] bg-[#ECECEC] rounded-[50px] font-normal flex items-center">
-              <input
-                type="text"
-                value={city}
-                name="city"
-                onChange={(event) => setCity(event.target.value)}
-                required
-                className="bg-[#ECECEC] rounded-[50px] text-[12px] sm:text-[13px] ml-2 focus:outline-none w-[95%]"
-              />
-            </div>
-            {errors.city && (
-              <p className="ml-1 text-[#ff0000] text-[10px]">{errors.city}</p>
-            )}
-          </div>
-          <div className="flex flex-col w-[40%]">
-            <label className="font-bold text-[11px] sm:text-[13px] ml-1">
-              Code postal*
-            </label>
-            <div className="h-[25px] sm:h-[30px] bg-[#ECECEC] rounded-[50px] font-normal flex items-center">
-               <select name="postalCode" value={postalCode} onChange={(event) => setPostalCode(event.target.value)} className="bg-[#ECECEC] rounded-[50px] text-[12px] sm:text-[13px] ml-2 w-full focus:outline-none" required>
-                <option value=""></option>
-                {selectedCommunes.map((codePostal) => (
-                  <option key={codePostal} value={codePostal}>{codePostal}</option>
-                ))}
-                </select>
-            </div>
-          </div>
         </div>
         <div className="flex items-center">
           <input

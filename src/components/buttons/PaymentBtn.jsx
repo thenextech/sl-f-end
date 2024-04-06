@@ -22,17 +22,20 @@ export default function PaymentBtn({ items, totalPrice, user }) {
     });
 
     if (userInfosResponse.ok) {
+      const orderItems = getItemsProps();
+      const orderAdresses = Object.values(orderItems).map(item => item.businessAddress);
       const userInfos = await userInfosResponse.json();
-
-      console.log(userInfos);
 
       const orderBody = {
         isClickAndCollect: true,
         totalPrice: totalPrice,
         creationDate: new Date(),
         status: 'READY',
+        merchantAdresses: orderAdresses,
         userId: user.userId
       }
+
+      console.log(orderBody);
   
       const orderCreationResponse = await fetch(`${apiUrl}/orders/create`, {
         method: "POST",
@@ -41,9 +44,10 @@ export default function PaymentBtn({ items, totalPrice, user }) {
       });
   
       if (orderCreationResponse.ok) {
+
+        console.log('order created successfully');
+        
         const orderCreationResponseData = await orderCreationResponse.json();
-  
-        const orderItems = getItemsProps();
 
         const nameUser = `${userInfos.firstName} ${userInfos.lastName}`;
         console.log(nameUser);

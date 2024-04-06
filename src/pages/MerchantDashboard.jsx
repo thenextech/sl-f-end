@@ -226,8 +226,8 @@ const MerchantDashboard = () => {
     if (isAuthenticated) {
         return (
             <>
-                <MerchantDashNavbar businessName={merchantData.businessName} />
-                <div className="container mx-auto mt-1">
+                <MerchantDashNavbar businessName={merchantData.businessName} merchantId={merchantData.userId} />
+                <div className="container mx-auto mt-8">
                     <div>
                         <h2 className="text-2xl font-semibold mb-4">Tableau de bord</h2>
 

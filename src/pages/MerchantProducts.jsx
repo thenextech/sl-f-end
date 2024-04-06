@@ -96,6 +96,7 @@ export default function MerchantProducts() {
                         productId={product.productId}
                         commercant={false}
                         businessName={merchant.businessName}
+                        businessAdress={`${merchant.address}, ${merchant.postalCode}`}
                         idMerchant={idMerchant}
                     />)}
                     </div>

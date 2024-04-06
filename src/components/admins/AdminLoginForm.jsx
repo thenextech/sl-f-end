@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-export default function ClientLoginForm() {
+export default function AdminLoginForm() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setErrors] = useState("");
@@ -12,14 +12,16 @@ export default function ClientLoginForm() {
   
     const handleSubmit = async (event) => {
       event.preventDefault();
-      const formData = new FormData();
-        formData.append('email', email);
-        formData.append('password', password);
+      const formData = {
+        isActive: true
+      }
       
-      const response = await fetch(`${API_URL}/client/login`, {
-          method: 'POST',
-          credentials: 'include',
-          body: formData
+      const response = await fetch(`${API_URL}/admin/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
       });
         
       if (response.ok) {
@@ -69,7 +71,6 @@ export default function ClientLoginForm() {
             <p className="ml-1 text-[#ff0000] text-[13px]">{error}</p>
             )}
           <button type="submit" className="mt-3 text-center rounded-[50px] w-full bg-[#3C24D1] py-1 text-white text-[10px] sm:text-[13px] text-[15px]">Se connecter</button>
-          <p className="text-[9px] lg:text-[12px] mt-1 font-semibold text-center">Vous n’avez pas de compte ? <Link to="/client/register" className="text-[#3C24D1]">Inscrivez-vous</Link></p>
         </div>
       </form>
     )

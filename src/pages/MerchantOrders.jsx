@@ -89,9 +89,6 @@ export default function MerchantOrders() {
         fetchAllCurrentOrders(merchantData.userId)
     }, [merchantData]);
 
-    console.log(merchantOrdersLines);
-    console.log(merchantOrdersLines.length);
-
     function handleEntrantesClicked() {
         setApprouveesClicked(false);
         setAnnuleesClicked(false);
@@ -110,32 +107,32 @@ export default function MerchantOrders() {
         setEntrantesClicked(false);
     }
 
-    return (
-        <>
-            <MerchantDashNavbar />
-            <div className="w-[93%] mx-auto mt-2">
-                <div className="sm:flex sm:justify-between">
-                    <div className="flex w-[250px] sm:w-[270px] md:w-[290px] lg:w-[310px]">
-                        <div className="hover:cursor-pointer" onClick={handleEntrantesClicked}>
-                            <p className={entrantesClicked ? "text-[15px] font-semibold sm:text-[16px] md:text-[18px] lg:text-[20px] border-b-2 border-black" : "text-[15px] font-bold sm:text-[16px] md:text-[18px] lg:text-[20px]"}>Entrantes</p>
-                        </div>
-                    </div>
-                    <div>
-                        <div className="h-[25px] sm:h-[30px] bg-[#ECECEC] rounded-[50px] font-normal flex items-center md:w-[300px] sm:w-[250px] w-full sm:mt-0 mt-4">
-                            <div className="pl-2">
-                                <IoMdSearch />
-                            </div>
-                            <input
-                                type="text"
-                                placeholder="Chercher une commande"
-                                name="orderSearch"
-                                className="bg-[#ECECEC] rounded-[50px] text-[12px] sm:text-[13px] ml-2 focus:outline-none w-[95%]"
-                                value={searchValue}
-                                onChange={(e) => setSearchValue(e.target.value)}
-                            />
-                        </div>
+  return (
+    <>  
+        <MerchantDashNavbar businessName={merchantData.businessName} merchantId={merchantData.userId} />
+        <div className="w-[93%] mx-auto mt-2">
+            <div className="sm:flex sm:justify-between">
+                <div className="flex w-[250px] sm:w-[270px] md:w-[290px] lg:w-[310px]">
+                    <div className="hover:cursor-pointer" onClick={handleEntrantesClicked}>
+                        <p className={entrantesClicked ? "text-[15px] font-semibold sm:text-[16px] md:text-[18px] lg:text-[20px] border-b-2 border-black" : "text-[15px] font-bold sm:text-[16px] md:text-[18px] lg:text-[20px]"}>Entrantes</p>
                     </div>
                 </div>
+                <div>
+                    <div className="h-[25px] sm:h-[30px] bg-[#ECECEC] rounded-[50px] font-normal flex items-center md:w-[300px] sm:w-[250px] w-full sm:mt-0 mt-4">
+                        <div className="pl-2">
+                            <IoMdSearch />
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="Chercher une commande"
+                            name="orderSearch"
+                            className="bg-[#ECECEC] rounded-[50px] text-[12px] sm:text-[13px] ml-2 focus:outline-none w-[95%]"
+                            value={searchValue}
+                            onChange={(e) => setSearchValue(e.target.value)}
+                        />
+                    </div>
+                </div>
+            </div>
                 <div className="md:mt-8">
                     {merchantOrdersLines.length > 0 ? merchantOrdersLines
                         .filter(order => order.orderId.toString().includes(searchValue))

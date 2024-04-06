@@ -3,7 +3,7 @@ import cocaImg from '../../../assets/images/products/coca.png';
 import { IoMdClose } from "react-icons/io";
 import { useShoppingCart } from './ShoppingCartContext';
 
-export default function ShoppingCartItem({ productId, nom, reference, businessName, quantity, price, merchantId}) {
+export default function ShoppingCartItem({ productId, nom, reference, businessName, businessAddress, quantity, price, merchantId}) {
   const { removeItemFromCart } = useShoppingCart();
 
   const handleRemoveItem = () => {

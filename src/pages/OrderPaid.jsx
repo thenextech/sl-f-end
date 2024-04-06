@@ -8,9 +8,58 @@ export default function OrderPaid() {
     const [order, setOrder] = useState({});
     const [orderLineItems, setOrderLineItems] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [clientData, setClientData] = useState({})
 
 
     const API_URL = process.env.REACT_APP_API_URL;
+
+    const isThereAnActiveSession = async () => {
+        try {
+            const response = await fetch(`${API_URL}/client/dashboard`, {
+                credentials: 'include',
+                method: 'GET'
+            });
+    
+            if (response.ok) {
+                const data = await response.json();
+                setClientData(data);
+                setIsAuthenticated(true);
+                
+            } else {
+                setIsAuthenticated(false);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            setIsAuthenticated(false); 
+        }
+    }
+
+    const addFidelityPoints = async (client) => {
+        try {
+            const response = await fetch(`${API_URL}/loyaltyCards/change-points`, {
+                credentials: 'include',
+                method: 'PUT',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    userId: client.object.userId,
+                    points: order.totalPrice * 0.4
+                })
+            });
+    
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+                console.log('Points de fidelité ajoutés avec succès');
+            } else {
+                const error = await response.json();
+                console.log('error ', error);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            setIsAuthenticated(false); 
+        }
+    }
 
     const fetchOrder = async () => {
         try {
@@ -71,28 +120,31 @@ export default function OrderPaid() {
     }
 
     const updateOrder = async () => {
-        const updatedOrder = {
-            ...order,
-            status: 'PAID'
-        };
 
-        console.log(updatedOrder);
-
-        try {
-            const response = await fetch(`${API_URL}/orders/${orderId.length === 101 ? orderId[50] : orderId[50] + orderId[51]}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(updatedOrder)
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                setOrder(data);
+        if (Object.keys(order).length > 0 > 0) {
+            const updatedOrder = {
+                ...order,
+                status: 'PAID'
+            };
+    
+            console.log(updatedOrder);
+    
+            try {
+                const response = await fetch(`${API_URL}/orders/${orderId.length === 101 ? orderId[50] : orderId[50] + orderId[51]}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedOrder)
+                });
+    
+                if (response.ok) {
+                    const data = await response.json();
+                    setOrder(data);
+                }
+            } catch (error) {
+                console.log('Update order error: ', error);
             }
-        } catch (error) {
-            console.log('Update order error: ', error);
         }
     }
 
@@ -138,11 +190,18 @@ export default function OrderPaid() {
     }
 
     useEffect(() => {
+        const checkSession = async () => {
+            await isThereAnActiveSession();
+        };
+    
+        checkSession();
+    }, []);
+
+    useEffect(() => {
         const checker = async () => {
             if (orderId.length == 102 || orderId.length == 101) {
                 setLoading(true);
                 await fetchOrder();
-                await updateOrder();
                 setLoading(false);
             }; 
         };
@@ -150,12 +209,17 @@ export default function OrderPaid() {
         checker();
     }, [])
 
+    useEffect(() => {
+        updateOrder(order)
+        addFidelityPoints(clientData);
+    }, [order, clientData]);
+
+
     if (orderId.length !== 102 && orderId.length !== 101) {
         return <Navigate to="/client/dashboard" replace={true} />;
     }
 
-    console.log(orderLineItems);
     if (order.status === 'PAID' && !loading) {
-        return <Navigate to={`/client/orderOK/${orderId}`} replace={true} />;
+        return <Navigate to={`/client/orderOK/${orderId}/${1}`} replace={true} />;
     }
 }
