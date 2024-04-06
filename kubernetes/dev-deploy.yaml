@@ -26,6 +26,16 @@ spec:
               configMapKeyRef:
                 key: REACT_APP_API_URL
                 name: api-url
+          - name: REACT_PUBLIC_STRIPE_API_KEY
+            valueFrom:
+              configMapKeyRef:
+                key: REACT_PUBLIC_STRIPE_API_KEY
+                name: api-url
+          - name: REACT_APP_GOOGLE_MAPS_API_KEY
+            valueFrom:
+              configMapKeyRef:
+                key: REACT_APP_GOOGLE_MAPS_API_KEY
+                name: api-url
 ---
 apiVersion: v1
 kind: Service
