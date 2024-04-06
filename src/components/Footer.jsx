@@ -29,7 +29,7 @@ export default function Footer() {
         </div>
         <div className="w-full h-[1px] bg-white"></div>
             <div className="w-[70%] mt-2 mx-auto pb-3">
-                <p className="text-white text-[12px] font-bold text-center">© 2023 ShopLoc - Tous droits réservés</p>
+                <p className="text-white text-[12px] font-bold text-center">© 2024 ShopLoc - Tous droits réservés</p>
                 <div className="flex items-center justify-center text-center">
                     <p className="mr-3 text-[#3C24D1] text-[10px] font-semibold"><Link to="#">Politique de confidentialité</Link></p>
                     <p className="text-[#3C24D1] text-[10px] font-semibold"><Link to="#">Conditions d’utilisations</Link></p>

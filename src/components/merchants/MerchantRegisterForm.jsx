@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {AiFillInfoCircle} from 'react-icons/ai';
+import { AiFillInfoCircle } from 'react-icons/ai';
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from 'react-places-autocomplete';
 
 export default function MerchantRegisterForm() {
     const [businessName, setbusinessName] = useState("");
@@ -8,7 +12,7 @@ export default function MerchantRegisterForm() {
     const [emailAddress, setEmailAddress] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPwd, setConfirmPwd] = useState("");
-    const [address1, setAddress1] = useState("");
+    const [address, setAddress] = useState("");
     const [address2, setAddress2] = useState("");
     const [city, setCity] = useState("");
     const [postalCode, setPostalCode] = useState("");
@@ -21,6 +25,27 @@ export default function MerchantRegisterForm() {
     const navigate = useNavigate();
 
     const API_URL = process.env.REACT_APP_API_URL;
+
+    const autoCompleteAdress = async value => {
+      const results = await geocodeByAddress(value);
+      const latLng = await getLatLng(results[0]);
+      const addressComponents = results[0].address_components;
+      let postal = "";
+      let locality = "";
+  
+      addressComponents.forEach(component => {
+        if (component.types.includes("postal_code")) {
+          postal = component.long_name;
+        }
+        if (component.types.includes("locality")) {
+          locality = component.long_name;
+        }
+      });
+  
+      setAddress(value);
+      setCity(locality);
+      setPostalCode(postal);
+    };
 
     useEffect(() => {
       // Lorsque la valeur de "city" change, effectuer une requête à l'API Geonames
@@ -50,9 +75,6 @@ export default function MerchantRegisterForm() {
   
     const handleSubmit = async (event) => {
 
-      console.log('53');
-
-
       event.preventDefault();
       const newErrors = {};
       
@@ -79,16 +101,6 @@ export default function MerchantRegisterForm() {
         newErrors.confirmPwd = "Les mots de passe ne correspondent pas";
       }
 
-      // Validation logic for Adresse ligne 1
-      if (!/^[-'a-zA-Z0-9, ]+$/.test(address1)) {
-        newErrors.address1 = "Adresse non valide. Utilisez des lettres minuscules, des lettres majuscules, des chiffres, des symboles comme -, ,, et '";
-      }
-
-      // Validation logic for Adresse ligne 2
-      if (address2 !== "" && !/^[-'a-zA-Z0-9, ]+$/.test(address2)) {
-        newErrors.address2 = "Adresse non valide. Utilisez des lettres minuscules, des lettres majuscules, des chiffres, des symboles comme -, ,, et '";
-      }
-
       // Validation logic for Ville (City)
       if (city === "") {
         newErrors.city = "Le champ Ville est requis";
@@ -104,31 +116,26 @@ export default function MerchantRegisterForm() {
       newErrors.representative = "Le représentant de la société ne peut contenir que des majuscules, des minuscules, des espaces et les symboles ' et -";
     }
 
-
-      console.log('107');
-
       if (Object.keys(newErrors).length === 0) {
+        
+        const merchantToCreate = {
+          businessName: businessName,
+          email: emailAddress,
+          password: password,
+          address: address,
+          city: city,
+          postalCode: postalCode,
+          userId: ''
+        };
 
-        console.log('105');
-
-        console.log(API_URL);
+        console.log(JSON.stringify(merchantToCreate));
 
         const response = await fetch(`${API_URL}/merchant/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({
-            businessName: businessName,
-            representative: representative,
-            email: emailAddress,
-            password: password,
-            lineAddress1: address1,
-            lineAddress2: address2,
-            city: city,
-            postalCode: postalCode,
-            acceptTerms: acceptTerms
-          })
+          body: JSON.stringify(merchantToCreate)
         })
 
         console.log(response);
@@ -136,9 +143,7 @@ export default function MerchantRegisterForm() {
 
         if (response.ok) {
           const url = await response.json();
-          console.log(url);
           navigate(url['url']);
-          console.log('130');
         } else {
           console.log('here ?');
           const errorMessage = await response.json();
@@ -255,66 +260,62 @@ export default function MerchantRegisterForm() {
             <p className="ml-1 text-[#ff0000] text-[10px]">{errors.confirmPwd}</p>
           )}
         </div>
-        <div className="flex flex-col mb-2">
-          <label className="font-bold text-[11px] sm:text-[13px] ml-1">
-            Adresse ligne 1*
-          </label>
-          <div className="h-[25px] md:w-[70%] sm:h-[30px] w-full bg-[#ECECEC] rounded-[50px] w-[50%] font-normal flex items-center">
-          <input
-            type="text"
-            value={address1}
-            onChange={(event) => setAddress1(event.target.value)}
-            className="bg-[#ECECEC] rounded-[50px] text-[12px] sm:text-[13px] ml-2 focus:outline-none w-[95%]"
-          />
+        <PlacesAutocomplete
+          value={address}
+          onChange={setAddress}
+          onSelect={autoCompleteAdress}
+        >
+          {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+            <div>
+              <label className="font-bold text-[11px] sm:text-[13px] ml-1">
+                Adresse de votre commerce*
+              </label>
+              <div className="h-[25px] md:w-[70%] sm:h-[30px] w-full bg-[#ECECEC] rounded-[50px] font-normal flex items-center">
+                <input
+                  {...getInputProps({
+                    className: 'location-search-input bg-[#ECECEC] rounded-[50px] text-[12px] sm:text-[13px] ml-2 focus:outline-none w-[95%]',
+                  })}
+                />
+              </div>
+              <div className="autocomplete-dropdown-container">
+                {suggestions.map(suggestion => {
+                  const className = suggestion.active
+                    ? 'suggestion-item--active'
+                    : 'suggestion-item';
+                  // inline style for demonstration purpose
+                  const style = suggestion.active
+                                ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                                : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                  return (
+                    <div
+                      {...getSuggestionItemProps(suggestion, {
+                        className,
+                        style,
+                      })}
+                    >
+                      <span>{suggestion.description}</span>
+                    </div>
+                  );
+                })}
+              </div>
           </div>
-          {errors.address1 && (
-            <p className="ml-1 text-[#ff0000] text-[10px]">{errors.address1}</p>
           )}
-        </div>
-        <div className="flex flex-col mb-2">
-          <label className="font-bold text-[11px] sm:text-[13px] ml-1">
-            Adresse ligne 2
-          </label>
-          <div className="h-[25px] md:w-[70%] sm:h-[30px] w-full bg-[#ECECEC] rounded-[50px] w-[50%] font-normal flex items-center">
-          <input
-            type="text"
-            value={address2}
-            onChange={(event) => setAddress2(event.target.value)}
-            className="bg-[#ECECEC] rounded-[50px] text-[12px] sm:text-[13px] ml-2 focus:outline-none w-[95%]"
-          />
-          </div>
-          {errors.address2 && (
-            <p className="ml-1 text-[#ff0000] text-[10px]">{errors.address2}</p>
-          )}
-        </div>
+        </PlacesAutocomplete>
         <div className="flex justify-between w-full md:w-[70%]  mb-3">
           <div className="flex flex-col w-[55%]">
             <label className="font-bold text-[11px] sm:text-[13px] ml-1">
               Ville
             </label>
             <div className="h-[25px] sm:h-[30px] bg-[#ECECEC] rounded-[50px] font-normal flex items-center">
-              <input
-                type="text"
-                value={city}
-                onChange={(event) => setCity(event.target.value)}
-                className="bg-[#ECECEC] rounded-[50px] text-[12px] sm:text-[13px] ml-2 focus:outline-none w-[95%]"
-              />
+              <input value={city} readOnly className="bg-[#ECECEC] rounded-[50px] text-[12px] sm:text-[13px] ml-2 focus:outline-none w-[95%]"/>
             </div>
-            {errors.city && (
-              <p className="ml-1 text-[#ff0000] text-[10px]">{errors.city}</p>
-            )}
           </div>
           <div className="flex flex-col w-[40%]">
             <label className="font-bold text-[11px] sm:text-[13px] ml-1">
               Code postal
             </label>
             <div className="h-[25px] sm:h-[30px] bg-[#ECECEC] rounded-[50px] font-normal flex items-center">
-              <select value={postalCode} onChange={(event) => setPostalCode(event.target.value)} className="bg-[#ECECEC] rounded-[50px] text-[12px] sm:text-[13px] ml-2 w-full focus:outline-none" required>
-                <option value=""></option>
-                {selectedCommunes.map((codePostal) => (
-                  <option key={codePostal} value={codePostal}>{codePostal}</option>
-                ))}
-              </select>
+              <input value={postalCode} readOnly className="bg-[#ECECEC] rounded-[50px] text-[12px] sm:text-[13px] ml-2 w-full focus:outline-none" />
             </div>
           </div>
         </div>

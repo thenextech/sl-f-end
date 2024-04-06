@@ -1,14 +1,11 @@
-/*import React, { useEffect, useState, useRef } from 'react';
-import { Navigate } from 'react-router-dom';
-import ClientNavbar from '../components/clients/ClientNavbar';
-import 'datatables.net-dt/css/jquery.dataTables.css';
-import $ from 'jquery';
-import 'datatables.net';
+import React, { useEffect, useState, useRef } from 'react';
+import AdminNavbar from '../components/admins/AdminNavbar';
 
 export default function AdminDashboard() {
     const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(null);
     const [fetchComplete, setFetchComplete] = useState(false);
     const [merchants, setMerchants] = useState([]);
+    const [clients, setClients] = useState([]);
     const [loading, setLoading] = useState(true);
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
@@ -18,29 +15,7 @@ export default function AdminDashboard() {
     const API_URL = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
-        const isAdminSessionActive = async () => {
-            try {
-                const response = await fetch(`${API_URL}/admin/dashboard`, {
-                    credentials: 'include',
-                    method: 'GET',
-                });
-
-                if (response.ok) {
-                    setIsAdminAuthenticated(true);
-                } else {
-                    setIsAdminAuthenticated(false);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                setIsAdminAuthenticated(false);
-            }
-        };
-
-        isAdminSessionActive();
-    }, []);
-
-    useEffect(() => {
-        const fetchData = async () => {
+        const fetchAllMerchants = async () => {
             try {
                 const merchantsResponse = await fetch(`${API_URL}/merchants/all`, {
                     credentials: 'include',
@@ -59,12 +34,32 @@ export default function AdminDashboard() {
             }
         };
 
+        const fetchAllClients = async () => {
+            try {
+                const clientsReponse = await fetch(`${API_URL}/clients/all`, {
+                    credentials: 'include',
+                    method: 'GET',
+                });
+
+                if (clientsReponse.ok) {
+                    const clientsData = await clientsReponse.json();
+                    setClients(clientsData);
+                    setFetchComplete(true);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
         if (loading && !fetchComplete) {
-            fetchData();
+            fetchAllMerchants();
+            fetchAllClients();
         }
     }, [loading, fetchComplete]);
 
-    useEffect(() => {
+    /*useEffect(() => {
         let dataTable = null;
 
         if (fetchComplete) {
@@ -79,151 +74,161 @@ export default function AdminDashboard() {
                 }
             });
         }
-    }, [fetchComplete]);
+    }, [fetchComplete]);*/
 
-    const handleStatusChange = (id, newStatus, section) => {
+    const handleStatusChange = async (id, newStatus, section) => {
+        console.log(id);
         if (section === 'merchants') {
-            setMerchants((prevMerchants) =>
-                prevMerchants.map((merchant) =>
-                    merchant.id === id ? { ...merchant, status: newStatus, isModified: true } : merchant
-                )
-            );
-        }
-    };
 
-    const handleSaveAll = async () => {
-        const modifiedMerchants = merchants.filter((merchant) => merchant.isModified);
+            const merchant = merchants.find((merchant) => merchant.userId === id);
 
-        const allModifiedData = [...modifiedMerchants];
+            const { userId, ...updatedMerchant } = merchant;
 
-        try {
-            for (const data of allModifiedData) {
-                const updatedData = {};
-                for (const key in data) {
-                    if (data.hasOwnProperty(key) && key !== 'id' && key !== 'isModified') {
-                        updatedData[key] = data[key];
-                    }
-                }
-    
-                const response = await fetch(`${API_URL}/merchants/${data.id}`, {
+            updatedMerchant.status = newStatus;
+            
+            try {
+                const response = await fetch(`${API_URL}/merchants/${id}`, {
                     credentials: 'include',
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(updatedData),
+                    body: JSON.stringify(updatedMerchant),
                 });
     
                 if (!response.ok) {
                     setErrorMessage('Error saving modifications.');
                     return;
+                } else {
+                    setMerchants((prevMerchants) =>
+                        prevMerchants.map((merchant) =>
+                            merchant.userId === id ? { ...updatedMerchant, userId: merchant.userId }  : merchant
+                    ));
                 }
+            } catch (error) {
+                console.error('Error:', error);
+                setErrorMessage('Erreur lors du changement de statut du commerçant : ', merchant.businessName);
             }
+
+        } else if (section === 'clients') {
     
-            setSuccessMessage('Toutes les modifications ont été enregistrées avec succès.');
-        } catch (error) {
-            console.error('Error:', error);
-            setErrorMessage('Erreur lors enregistrement des modifications.');
+            const retrievedClient = clients.find((client) => client.userId === id);
+
+            const { userId, ...updatedClientz } = retrievedClient;
+
+            const updatedClient = {...retrievedClient, status: newStatus}
+            
+            try {
+                const response = await fetch(`${API_URL}/clients/${id}`, {
+                    credentials: 'include',
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updatedClient),
+                });
+    
+                if (!response.ok) {
+                    setErrorMessage('Error saving modifications.');
+                    return;
+                } else {
+                    setClients((prevClients) =>
+                        prevClients.map((client) =>
+                            client.userId === id ? updatedClient : client
+                    ));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                setErrorMessage('Erreur lors du changement de statut du client');
+            }
         }
     };
-
-
-    if (isAdminAuthenticated === null) {
-        return <p>Vérification de l'authentification...</p>;
-    }
-
-    if (isAdminAuthenticated === false) {
-        return <Navigate to="/admin/login" replace={true} />;
-    }
 
     if (fetchComplete) {
         return (
             <>
-                <ClientNavbar />
-                <div className="container mx-auto">
-                    <div className="text-xl font-bold mt-2 mb-2">Gestion des profils</div>
-                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
-                        <div className="text-l font-bold mr-2 space-x-2 mb-4 lg:mb-0">
-                            <button
-                                className="py-2 px-4 rounded-md"
-                                type="button"
-                                onClick={() => setSelectedSection('merchants')}
-                            >
-                                Gestion des commerçants
-                            </button>
+                <AdminNavbar />
+        <div className="container mx-auto w-[95%]">
+                    <div className="text-xl font-bold mt-2 mb-2 text-center">Gestion des profils</div>
+                    <div className="flex items-center">
+                    <div className={selectedSection === 'merchants' ? "flex flex-col lg:flex-row lg:items-center lg:justify-between border-b-2" : "flex flex-col lg:flex-row lg:items-center lg:justify-between"}>
+                            <div className="text-l font-bold mr-2 space-x-2 mb-4 lg:mb-0">
+                                <button
+                                    className="py-2 px-4 rounded-md"
+                                    type="button"
+                                    onClick={() => setSelectedSection('merchants')}
+                                >
+                                    Gestion des commerçants
+                                </button>
+                            </div>
+
+                            {successMessage && <p className="text-green-500">{successMessage}</p>}
+                            {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+                        </div>
+                        <div className={selectedSection === 'clients' ? "flex flex-col lg:flex-row lg:items-center lg:justify-between border-b-2" : "flex flex-col lg:flex-row lg:items-center lg:justify-between"}>
+                            <div className="text-l font-bold mr-2 space-x-2 mb-4 lg:mb-0">
+                                <button
+                                    className="py-2 px-4 rounded-md"
+                                    type="button"
+                                    onClick={() => setSelectedSection('clients')}
+                                >
+                                    Gestion des clients
+                                </button>
+                            </div>
+
+                            {successMessage && <p className="text-green-500">{successMessage}</p>}
+                            {errorMessage && <p className="text-red-500">{errorMessage}</p>}
                         </div>
 
-                        {successMessage && <p className="text-green-500">{successMessage}</p>}
-                        {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+                        
                     </div>
-                    <button onClick={handleSaveAll} className="mt-2 text-center rounded-[50px] bg-[#3C24D1] py-2 px-2 text-white text-[10px] sm:text-[13px] text-[15px]">
-                        Enregistrer 
-                    </button>
+                    
                     {selectedSection === 'merchants' && (
-                        <div className="mt-2 overflow-x-auto">
+                        <>
+                            <div className="mt-10 overflow-x-auto">
                             <table
                                 ref={tableRef}
                                 className="min-w-full bg-white border border-gray-300"
                             >
                                  <thead>
-                                    <tr>
-                                    <th className="border-b">ID</th>
-                                    <th className="border-b">Nom commerce</th>
-                                    <th className="border-b">First Name</th>
-                                    <th className="border-b">Email</th>
-                                    <th className="border-b">Status</th>
-                                    <th className="border-b">Action</th>
+                                    <tr className="border-2">
+                                        <th className="border-2">Nom commerce</th>
+                                        <th className="border-2">Email</th>
+                                        <th className="border-2">Status</th>
+                                        <th className="border-2">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {merchants.map((merchant) => (
-                                        <tr key={merchant.id}>
-                                            <td className="border-b">{merchant.id}</td>
-                                        <td className="border-b">{merchant.businessName}</td>
-                                        <td className="border-b">{merchant.firstName}</td>
-                                        <td className="border-b">{merchant.email}</td>
-                                        <td className="border-b">
-                                                <select
-                                                    value={merchant.status}
-                                                    onChange={(e) =>
-                                                        handleStatusChange(
-                                                            merchant.id,
-                                                            e.target.value,
-                                                            'merchants'
-                                                        )
-                                                    }
-                                                    className="bg-blue-100 border rounded py-1 px-2"
-                                                >
-                                                    <option value="ACTIVE">ACTIVE</option>
-                                                    <option value="INACTIVE">INACTIVE</option>
-                                                    <option value="BLOCKED">BLOCKED</option>
-                                                    <option value="DELETED">DELETED</option>
-                                                </select>
-                                            </td>
-                                            <td className="py-2 px-4 border-b">
+                                        <tr key={merchant.userId}>
+                                        <td className="border-2 text-center">{merchant.businessName}</td>
+                                        <td className="border-2 text-center">{merchant.email}</td>
+                                            <td className="border-2 text-center">{merchant.status}</td>
+                                            <td className="py-2 px-4 border-2 text-center">
                                                 <button
+                                                    disabled={merchant.status === 'ACTIVE'}
                                                     onClick={() =>
                                                         handleStatusChange(
-                                                            merchant.id,
+                                                            merchant.userId,
                                                             'ACTIVE',
                                                             'merchants'
                                                         )
                                                     }
-                                                    className="bg-green-500 text-white py-1 px-2 rounded"
+                                                    className={merchant.status === 'ACTIVE' ? "bg-green-200 text-white py-1 px-2 rounded" : "bg-green-500 text-white py-1 px-2 rounded"}
                                                 >
-                                                    Activate
+                                                    Activer
                                                 </button>
                                                 <button
                                                     onClick={() =>
                                                         handleStatusChange(
-                                                            merchant.id,
+                                                            merchant.userId,
                                                             'INACTIVE',
                                                             'merchants'
                                                         )
                                                     }
-                                                    className="bg-red-500 text-white py-1 px-2 rounded ml-2"
+                                                    className={merchant.status === 'INACTIVE' ? "bg-red-200 text-white py-1 px-2 rounded ml-2 disabled" : "bg-red-500 text-white py-1 px-2 rounded ml-2"}
                                                 >
-                                                    Deactivate
+                                                    Desactiver
                                                 </button>
                                             </td>
                                         </tr>
@@ -231,13 +236,68 @@ export default function AdminDashboard() {
                                 </tbody>
                             </table>
                         </div>
+                        </>
                     )}
-
                     
+                    {selectedSection === 'clients' && (
+                        <>
+                            <div className="mt-10 overflow-x-auto">
+                            <table
+                                ref={tableRef}
+                                className="min-w-full bg-white border border-gray-300"
+                            >
+                                 <thead>
+                                    <tr className="border-2">
+                                        <th className="border-2">Nom client</th>
+                                        <th className="border-2">Email</th>
+                                        <th className="border-2">Status</th>
+                                        <th className="border-2">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {clients.map((client) => (
+                                        <tr key={client.userId}>
+                                        <td className="border-2 text-center">{client.firstName} {client.lastName}</td>
+                                        <td className="border-2 text-center">{client.email}</td>
+                                        <td className="border-2 text-center font-bold">{client.status}</td>
+                                            <td className="py-2 px-4 border-2 text-center">
+                                                <button
+                                                    disabled={client.status === 'ACTIVE'}
+                                                    onClick={() =>
+                                                        handleStatusChange(
+                                                            client.userId,
+                                                            'ACTIVE',
+                                                            'clients'
+                                                        )
+                                                    }
+                                                    className={client.status === 'ACTIVE' ? "bg-green-200 text-white py-1 px-2 rounded" : "bg-green-500 text-white py-1 px-2 rounded"}
+                                                >
+                                                    Activer
+                                                </button>
+                                                <button
+                                                    onClick={() =>
+                                                        handleStatusChange(
+                                                            client.userId,
+                                                            'INACTIVE',
+                                                            'clients'
+                                                        )
+                                                    }
+                                                    className={client.status === 'INACTIVE' ? "bg-red-200 text-white py-1 px-2 rounded ml-2 disabled" : "bg-red-500 text-white py-1 px-2 rounded ml-2"}
+                                                >
+                                                    Deactiver
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                        </>
+                    )}
                 </div>
             </>
         );
     }
 
     return <p>Chargement...</p>;
-}*/
+}
