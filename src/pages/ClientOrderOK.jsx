@@ -114,7 +114,7 @@ function ClientOrderOK() {
                         </button>
                     </div>
                     <div className="mt-6 w-full">
-                        <p className="text-center text-[10px]">© 2023 ShopLoc - Tous droits réservés</p>
+                        <p className="text-center text-[10px]">© 2024 ShopLoc - Tous droits réservés</p>
                     </div>
                 </div>
                 </> : null}

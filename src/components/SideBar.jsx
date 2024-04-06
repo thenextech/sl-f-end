@@ -18,7 +18,7 @@ export default function SideBar({elementClicked, handleElementClick, items }) {
           <div className="flex flex-col items-center">
             <img src={logo} alt="logo shoploc" className="w-[270px] sm:w-[250px] md:w-[270px]"></img>
             <p className="text-[10px] text-[#494949] font-semibold mb-2 text-center">
-              © 2023 ShopLoc - Tous droits réservés
+              © 2024 ShopLoc - Tous droits réservés
             </p>
           </div>
         </div>
