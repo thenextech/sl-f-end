@@ -75,8 +75,8 @@ export default function MerchantProducts() {
     return (
         <>
             <ClientNavbar user={userData} />
-            <div className="w-[95%] mx-auto sm:mt-4 sm:w-[97%] flex justify-between items-center" onClick={goBackToDashboard}>
-                <MdKeyboardBackspace className="text-[45px] sm:text-[55px] md:text-[65px] hover:cursor-pointer "/>
+            <div className="w-[95%] mx-auto sm:mt-4 sm:w-[97%] flex justify-between items-center">
+                <MdKeyboardBackspace className="text-[45px] sm:text-[55px] md:text-[65px] hover:cursor-pointer " onClick={goBackToDashboard}/>
                 <p className="text-[10px] sm:text-[13px] md:text-[16px] font-bold uppercase">{merchant.businessName}</p>
             </div>
             <div className="flex justify-center items-center">

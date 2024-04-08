@@ -155,7 +155,7 @@ export default function ClientNavbar( { user }) {
           <AddressBox />
         </div>
         <div className="flex lg:w-[380px] sm:w-[190px] w-[280px] sm:justify-evenly justify-end">
-          <CatalogueVFPBox isVfp={clientLoyaltyCard.vfp} />
+          <CatalogueVFPBox isVfp={userData.vfp} />
           <FidelityPointBox points={clientLoyaltyCard.points} />
           <ShoppingCartNav handleBoxClick={handleCartBoxClick} numItems={numItems}/>
         </div>
