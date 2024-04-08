@@ -32,7 +32,7 @@ export default function AdminVfp() {
     const fetchAdminBenefits = async () => {
       try {
         const response = await fetch(
-          `${API_URL}/benefits/user/${34}`
+          `${API_URL}/benefits/user/${30}`
         );
 
         if (response.ok) {
