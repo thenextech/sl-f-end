@@ -101,7 +101,7 @@ function ClientOrderOK() {
                         <img src={qrCode} alt="QR CODE" className="w-[300px] h-[300px]"></img>
                     </div>
                     <div className="px-4 mt-2 z-20">
-                                {n === 1 ? <h1 className="lg:text-[30px]">🎉 Votre paiement a été accepté.</h1> : <h1 className="lg:text-[30px]">🎉 Commande n°#{orderIdAfterHash}</h1>}
+                                {n == 1 ? <h1 className="lg:text-[30px]">🎉 Votre paiement a été accepté.</h1> : <h1 className="lg:text-[30px]">🎉 Commande n°#{orderIdAfterHash}</h1>}
                         <p className="text-[14px] mt-1 lg:text-[20px]">
                             Vous trouverez ci-dessous l’itinéraire à suivre afin de récupérer votre commande. N’oubliez pas de passer votre <span className="font-bold">QR code</span> à chaque fois.
                         </p>
